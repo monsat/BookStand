@@ -1,0 +1,6 @@
+tmp/**/*
+config/**/*
+
+.cache
+.settings
+.project
