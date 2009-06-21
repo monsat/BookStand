@@ -36,5 +36,7 @@
  * @subpackage    cake.cake.libs.model
  */
 class BookStandAppModel extends AppModel {
+	var $Controller;			// Controller参照用
+	
+	
 }
-?>

@@ -36,32 +36,109 @@
  * @subpackage    cake.cake.libs.controller
  */
 class BookStandAppController extends AppController {
-
+	/*
+	 * Models
+	 * @var BookStandArticle
+	 * 
+	 * Components
+	 * @var BookStandToolComponent
+	 * @var BookStandAdminComponent
+	 * @var RequestHandlerComponent
+	 * @var SessionComponent
+	 * @var AuthComponent
+	 * @var AclComponent
+	 * @var QdmailComponent
+	 */
+	var $BookStandArticle;
+	
+	var $BookStandTool;
+	var $BookStandAdmin;
+	var $RequestHandler;
+	var $Session;
+	var $Acl;
+	var $Auth;
+	var $Qdmail;
+	
+	var $components = array(
+			'BookStand.BookStandTool',
+//			'BookStand.BookStandAdmin',
+			'Session',
+		);
+	var $helpers = array(
+			'Bs',
+			'Form',
+			'Text',
+			'Session',
+		);
 	function beforeFilter() {
 		// 設定初期値
 		$default_settings = array(
-			// This Plugin Version
-			'version' => '0.0.1',
-			// main
-			'db_scheme' => '1',
-			'theme' => 'book_stand_default_001',		// 'Theme View'を使用しないときは ''
-			// Debug Mode
-			'isDebug' => false,
+			// Plugin Settings
+			'config' => array(
+				// This Plugin Version
+				'version' => "0.0.1",
+				// main
+				'db_scheme' => "1",
+				'theme' => "book_stand_default_001",		// 'Theme View'を使用しないときは ''
+				'admin_theme' => "book_stand_admin_001",		// 'Theme View'を使用しないときは ''
+				// Debug Mode
+				'isDebug' => false,
+			),
+			// Site Info Settings
+			'info' => array(
+				'title' => "Blog Title",
+				'description' => "Blog Description",
+				'owner' => "Owner Name",
+				'owner_profile' => "Owner Profile",
+			),
+			// Edit
+			'edit' => array(
+				'editor' => true,
+				'config_path' => '',
+				'rows' => 10,
+				'isRevision' => true,
+			),
 		);
 		// ユーザー設定の読み込み
-		Configure::write('BookStand.config' ,Set::merge($default_settings ,Configure::read('BookStand.config')));
+		Configure::write('BookStand' ,Set::merge($default_settings ,Configure::read('BookStand')));
+		// Session
+		// Book
+		if (!empty($this->params['book'])) {
+			$this->Session->write('BookStand.book' ,$this->params['book']);
+		} else {
+			$this->Session->write('BookStand.book' ,null);
+		}
+		// Books.all
+		$static_books = Configure::read('BookStand.books.statics');
+		foreach ($static_books as $book) $all_books[ $book['id'] ] = $book['name'];
+		$dynamic_books = Configure::read('BookStand.books.dynamics');
+		foreach ($dynamic_books as $book) $all_books[ $book['id'] ] = $book['name'];
+		Configure::write('BookStand.books.all' ,$all_books);
 		
 		// Theme
-		if (Configure::read('BookStand.config.theme') !== '') {
-			$this->view = 'Theme';
-			$this->theme = Configure::read('BookStand.config.theme');
+		if (empty($this->params[ Configure::read('BookStand.config.admin') ])) {
+			// User Theme
+			if (Configure::read('BookStand.config.theme') !== '') {
+				$this->view = 'Theme';
+				$this->theme = Configure::read('BookStand.config.theme');
+			}
+		} else {
+			// Admin Theme
+			if (Configure::read('BookStand.config.admin_theme') !== '') {
+				$this->view = 'Theme';
+				$this->theme = Configure::read('BookStand.config.admin_theme');
+			}
 		}
 		// Debug Mode
 		if (Configure::read('BookStand.config.isDebug')) {
 			debug(Configure::read('BookStand.config'));
 		}
-		
+		// set controller
+		$this->{$this->modelClass}->Controller =& $this;
 		parent::beforeFilter();
 	}
 	
+	function beforeRender() {
+		parent::beforeRender();
+	}
 }
