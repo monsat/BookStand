@@ -26,13 +26,12 @@ class BookStandToolComponent extends Object
 	function url($url = array()) {
 		if (is_array($url)) {
 			$defaults = array(
-				'book' => $this->Controller->Session->read('BookStand.book'),
+				'book' => $this->Controller->params['book'],
 				'plugin' => 'book_stand',
 			);
 			// for admin routing
-			$admin = Configure::read('BookStand.config.admin');
-			if (!empty($this->Controller->params[ $admin ])) {
-				$defaults = Set::merge($defaults ,array($admin => true));
+			if (!empty($this->Controller->params['admin'])) {
+				$defaults = Set::merge($defaults ,array('admin' => true));
 			}
 			$url = Set::merge($defaults ,$url);
 		}

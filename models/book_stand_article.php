@@ -2,9 +2,13 @@
 class BookStandArticle extends BookStandAppModel {
 
 	var $name = 'BookStandArticle';
+	var $actsAs = array(
+		'BookStand.attribute' => array('posted_status'),
+	);
 	var $validate = array(
 		'title' => array(
-				'rule' => 'notempty',
+				'rule' => array('maxlength' ,255),
+				'allowEmpty' => false,
 			),
 		'slug' => array(
 				'rule' => array('maxlength' ,255),
@@ -27,7 +31,6 @@ class BookStandArticle extends BookStandAppModel {
 			),
 	);
 	
-	var $books = array();
 	var $save_types = array(
 		'draft' => '下書き保存',
 		'now' => '今すぐ投稿',
@@ -40,14 +43,14 @@ class BookStandArticle extends BookStandAppModel {
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
-/*		'BookStandBook' => array(
+		'BookStandBook' => array(
 			'className' => 'BookStand.BookStandBook',
 			'foreignKey' => 'book_stand_book_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-*/		'BookStandArticleStatus' => array(
+		'BookStandArticleStatus' => array(
 			'className' => 'BookStand.BookStandArticleStatus',
 			'foreignKey' => 'book_stand_article_status_id',
 			'conditions' => '',
@@ -137,6 +140,11 @@ class BookStandArticle extends BookStandAppModel {
 		)
 	);
 	
+	function beforeSave() {
+		// for search
+		$this->data['BookStandArticle']['body'] = strip_tags( $this->data['BookStandRevision']['body'] );
+		return true;
+	}
 	function afterSave($created) {
 		// id を BookStandRevision book_stand_article_id に
 		if (empty($this->data['BookStandRevision']['id'])) {
@@ -151,22 +159,27 @@ class BookStandArticle extends BookStandAppModel {
 			$this->data['BookStandRevision']['id'] = null;
 		}
 	}
-	function bookStandBooksList() {
-		if (!empty($this->books)) return $this->books;
-		$config_books = Configure::read('BookStand.books');
-		$results['ページ'] = $this->_booksList($config_books['statics']);
-		$results['ブログ'] = $this->_booksList($config_books['dynamics']);
-		return $results;
-	}
-	function _booksList($books) {
-		$book_name = $this->Controller->Session->read('BookStand.book');
-		foreach ($books as $book) {
-			$results[ $book['id'] ] = $book['name'];
-			if ($book['dir'] == $book_name) {
-				$this->Controller->Session->write('BookStand.book_id' ,$book['id']);
-			}
+	
+	function posted_status($article) {
+		$results = array('status' => '公開' ,'date_type' => '公開' ,'date' => $article['BookStandArticle']['begin_publishing']);
+		// draft
+		if ($article['BookStandArticle']['book_stand_article_status_id'] == 1) {
+			$results = array('status' => '下書き' ,'date_type' => '最終更新' ,'date' => $article['BookStandArticle']['modified']);
+		} elseif ($date = $this->is_deleted()) {
+		// deleted
+			$results = array('status' => '公開終了' ,'date_type' => '公開終了' ,'date' => $date);
+		} elseif (strtotime($article['BookStandArticle']['begin_publishing']) > time()) {
+		// reserved
+			$results['status'] = '投稿予約';
 		}
 		return $results;
+	}
+	function is_deleted($current_data = null) {
+		if (is_null($current_data)) $current_data = $this->data;
+		if ($current_data['BookStandArticle']['deleted'] == true) return $current_data['BookStandArticle']['deleted_time'];
+		if ($current_data['BookStandArticle']['book_stand_article_status_id'] == 4) return $current_data['BookStandArticle']['end_publishing'];
+		if (strtotime($current_data['BookStandArticle']['end_publishing']) < time()) return $current_data['BookStandArticle']['end_publishing'];
+		return false;
 	}
 
 }

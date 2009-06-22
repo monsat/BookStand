@@ -7,11 +7,12 @@ class BsHelper extends Helper
 {
 	var $helpers = array('Html' ,'Form' ,'Time' ,'Session' ,'Javascript');
 	var $monthNames = array('1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月');
-	var $articles = array(
-	);
+	var $view;
+	var $develop;
 	
 	function __construct()
 	{
+		$this->view = ClassRegistry::getObject('view');
 		parent::__construct();
 	}
 	/**
@@ -36,18 +37,13 @@ class BsHelper extends Helper
 	 */
 	function url($url = array()) {
 		if (is_array($url)) {
-			$view = ClassRegistry::getObject('view');
 			$defaults = array(
-				'book' => $this->Session->read('BookStand.book'),
+				'book' => $this->view->params['book'],
 				'plugin' => 'book_stand',
 			);
 			// for admin routing
-			$admin = Configure::read('BookStand.config.admin');
-			if (!empty($view->params[ $admin ])) {
-				$admin_defaults = array(
-					$admin => true,
-				);
-				$defaults = Set::merge($defaults ,$admin_defaults);
+			if (!empty($this->view->params['admin'])) {
+				$defaults = Set::merge($defaults ,array('admin' => true));
 			}
 			$url = Set::merge($defaults ,$url);
 		}
@@ -71,9 +67,19 @@ class BsHelper extends Helper
 	 */
 	function getAction() {
 		$view = ClassRegistry::getObject('view');
-		$admin = Configure::read('BookStand.config.admin');
-		if (empty($view->params[ $admin ])) return $view->params['action'];
-		return substr($view->params['action'] ,strlen($view->params['prefix']) + 1);
+		if (empty($view->params['admin'])) return $view->params['action'];
+		return substr($view->params['action'] ,strlen('admin') + 1);
+	}
+	
+	function isAdd($true = true ,$false = false) {
+		return $this->isAction($true ,$false );
+	}
+	function isEdit($true = true ,$false = false) {
+		return $this->isAction($true ,$false ,'edit');
+	}
+	function isAction($true = true ,$false = false ,$action = 'add') {
+		$is_action = $this->view->params['action'] == $action || $this->view->params['action'] == 'admin_' . $action;
+		return ($is_action) ? $true : $false;
 	}
 	// layout用
 	/**
@@ -100,8 +106,7 @@ class BsHelper extends Helper
 	 * @return string 出力文字列
 	 */
 	function tabElement($n ,$element ,$params = array() ,$loadHelpers = false) {
-		$view = ClassRegistry::getObject('view');
-		return $this->tab($n ,$view->element($element ,$params ,$loadHelpers));
+		return $this->tab($n ,$this->view->element($element ,$params ,$loadHelpers));
 	}
 	
 	/**

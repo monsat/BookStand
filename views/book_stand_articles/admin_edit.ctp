@@ -12,7 +12,7 @@
 ?>
 
 	<fieldset>
-		<legend><?php echo h('ページの基本情報');?></legend>
+		<legend><?php echo h('ページの' . $bs->isAdd("新規追加","編集") );?></legend>
 <?php
 	echo $bs->tab(2,
 		$bs->editNotes('基本情報について' ,array(
@@ -94,7 +94,7 @@
 		<legend><?php echo h('記事の投稿');?></legend>
 <?php
 		echo $bs->tab(2,
-			$form->end(aa('label',"投稿",'class',"default floatRight",'before',$bs->link('編集を破棄し記事一覧に戻る' ,aa('action',"index",'class',"floatLeft"))))
+			$form->end(aa('label',$bs->isAdd("新規追加","編集を保存"),'class',"default floatRight",'before',$bs->link('編集を破棄し記事一覧に戻る' ,aa('action',"index",'class',"floatLeft"))))
 		);
 ?>
 

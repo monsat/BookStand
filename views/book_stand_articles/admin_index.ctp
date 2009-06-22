@@ -27,7 +27,7 @@ foreach ($bookStandArticles as $bookStandArticle):
 ?>
 	<tr<?php echo $class;?>>
 		<td>
-			<?php echo h($bookStandAllBooks[ $bookStandArticle['BookStandArticle']['book_stand_book_id'] ]); ?>
+			<?php echo $html->link($bookStandArticle['BookStandBook']['title'], array('controller'=> 'book_stand_books', 'action'=>'view', $bookStandArticle['BookStandBook']['id'])); ?>
 		</td>
 		<td>
 <?php
@@ -44,21 +44,14 @@ foreach ($bookStandArticles as $bookStandArticle):
 			<?php echo $html->link($bookStandArticle['BookStandCategory']['name'], array('controller'=> 'book_stand_categories', 'action'=>'view', $bookStandArticle['BookStandCategory']['id'])); ?>
 		</td>
 		<td>
-			<?php echo $bookStandArticle['BookStandArticle']['book_stand_comment_count']; ?>
+			<?php echo (int)$bookStandArticle['BookStandArticle']['book_stand_comment_count']; ?>
 		</td>
 		<td>
 			<?php echo $bookStandArticle['BookStandArticle']['book_stand_tag_count']; ?>
 		</td>
 		<td>
 <?php
-	if (true) {
-		echo $bs->niceShort(strtotime($bookStandArticle['BookStandArticle']['begin_publishing'])) . '公開';
-	} elseif (true) {
-		echo $bs->niceShort(strtotime($bookStandArticle['BookStandArticle']['modified'])) . '最終更新';
-	} elseif (true) {
-		echo $bs->niceShort(strtotime($bookStandArticle['BookStandArticle']['end_publishing'])) . '公開終了';
-	}
-	
+	echo $bs->niceShort(strtotime($bookStandArticle['BookStandArticle']['posted_status']['date'])) . $bookStandArticle['BookStandArticle']['posted_status']['date_type'];
 ?>
 		</td>
 		<td class="actions">

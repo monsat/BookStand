@@ -81,6 +81,7 @@ class BookStandAppController extends AppController {
 				'db_scheme' => "1",
 				'theme' => "book_stand_default_001",		// 'Theme View'を使用しないときは ''
 				'admin_theme' => "book_stand_admin_001",		// 'Theme View'を使用しないときは ''
+				'admin' => 'admin',
 				// Debug Mode
 				'isDebug' => false,
 			),
@@ -103,18 +104,7 @@ class BookStandAppController extends AppController {
 		Configure::write('BookStand' ,Set::merge($default_settings ,Configure::read('BookStand')));
 		// Session
 		// Book
-		if (!empty($this->params['book'])) {
-			$this->Session->write('BookStand.book' ,$this->params['book']);
-		} else {
-			$this->Session->write('BookStand.book' ,null);
-		}
-		// Books.all
-		$static_books = Configure::read('BookStand.books.statics');
-		foreach ($static_books as $book) $all_books[ $book['id'] ] = $book['name'];
-		$dynamic_books = Configure::read('BookStand.books.dynamics');
-		foreach ($dynamic_books as $book) $all_books[ $book['id'] ] = $book['name'];
-		Configure::write('BookStand.books.all' ,$all_books);
-		
+		if (empty($this->params['book'])) $this->params['book'] = Configure::read('BookStand.info.is_subdomain');
 		// Theme
 		if (empty($this->params[ Configure::read('BookStand.config.admin') ])) {
 			// User Theme

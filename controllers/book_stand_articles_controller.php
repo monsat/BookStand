@@ -16,39 +16,12 @@ class BookStandArticlesController extends BookStandAppController {
 		}
 		$this->data = $this->BookStandArticle->read(null, $id);
 		
-/*		$defaults['BookStandArticle'] = array(
-			'id'  => 1,
-			'book_stand_book_id'  => 1,
-			'title'  => 'Lorem ipsum dolor sit amet',
-			'slug'  => 'Loremipsumdolorsitamet',
-			'mbslug'  => 'Loremipsumdolorsitamet',
-			'posted'  => '2009-06-14 13:50:58',
-			'book_stand_article_id'  => 1,
-			'book_stand_article_status_id'  => 1,
-			'book_stand_author_id'  => 1,
-			'book_stand_category_id'  => 1,
-			'book_stand_comment_count'  => 1,
-			'book_stand_revision_id'  => 1,
-			'book_stand_revision_count'  => 1,
-			'book_stand_tag_count'  => 1,
-			'begin_publishing'  => '2009-06-14 13:50:58',
-			'end_publishing'  => '2009-06-14 13:50:58',
-			'deleted'  => 1,
-			'deleted_time'  => '2009-06-14 13:50:58',
-			'created'  => '2009-06-14 13:50:58',
-			'modified'  => '2009-06-14 13:50:58'
-		);
-		$this->data['BookStandAuthor']['name'] = '田中弘治';
-		$this->data = Set::merge($defaults ,$this->data);
-*/
 	}
 
 
 	function admin_index() {
 		$this->BookStandArticle->recursive = 0;
 		$this->set('bookStandArticles', $this->paginate());
-		$bookStandAllBooks = Configure::read('BookStand.books.all');
-		$this->set(compact('bookStandAllBooks'));
 	}
 
 	function admin_add($id = null) {
@@ -68,7 +41,7 @@ class BookStandArticlesController extends BookStandAppController {
 			$this->data = $this->BookStandArticle->read(null, $id);
 			$this->data[ $this->modelClass ][ $this->{$this->modelClass}->primaryKey ] = null;
 		}
-		$bookStandBooks = $this->BookStandArticle->bookStandBooksList();
+		$bookStandBooks = $this->BookStandArticle->BookStandBook->find('list');
 		$bookStandSaveTypes = $this->BookStandArticle->save_types;
 		$bookStandArticleStatuses = $this->BookStandArticle->BookStandArticleStatus->find('list');
 
@@ -102,7 +75,7 @@ class BookStandArticlesController extends BookStandAppController {
 		if (empty($this->data)) {
 			$this->data = $this->BookStandArticle->read(null, $id);
 		}
-		$bookStandBooks = $this->BookStandArticle->bookStandBooksList();
+		$bookStandBooks = $this->BookStandArticle->BookStandBook->find('list');
 		$bookStandSaveTypes = $this->BookStandArticle->save_types;
 		$bookStandRevisionOptions = $this->BookStandArticle->revision_options;
 		$bookStandArticleStatuses = $this->BookStandArticle->BookStandArticleStatus->find('list');
