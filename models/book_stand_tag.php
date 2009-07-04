@@ -2,9 +2,20 @@
 class BookStandTag extends BookStandAppModel {
 
 	var $name = 'BookStandTag';
+	var $actsAs = array(
+		'BookStand.CounterCacheHabtm',
+	);
+	var $order = array('book_stand_article_count DESC','name ASC');
+	
 	var $validate = array(
-		'name' => array('notempty'),
-		'note' => array('maxlength')
+		'name' => array(
+				'rule' => array('maxlength' ,255),
+				'allowEmpty' => false,
+			),
+		'note' => array(
+				'rule' => array('maxlength' ,255),
+				'allowEmpty' => true,
+			),
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -22,9 +33,9 @@ class BookStandTag extends BookStandAppModel {
 			'offset' => '',
 			'finderQuery' => '',
 			'deleteQuery' => '',
-			'insertQuery' => ''
+			'insertQuery' => '',
+			'counterScope' => array(),
 		)
 	);
 
 }
-?>

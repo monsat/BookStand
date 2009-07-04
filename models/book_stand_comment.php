@@ -3,10 +3,27 @@ class BookStandComment extends BookStandAppModel {
 
 	var $name = 'BookStandComment';
 	var $validate = array(
-		'title' => array('notempty'),
-		'author_url' => array('url'),
-		'author_ip' => array('ip'),
-		'posted' => array('time')
+		'title' => array(
+				'rule' => array('maxlength' ,255),
+				'allowEmpty' => false,
+			),
+		'author' => array(
+				'rule' => array('maxlength' ,255),
+				'allowEmpty' => true,
+			),
+		'author_url' => array(
+				'rule' => array('url'),
+				'message' => 'URL文字列を確認してください',
+				'allowEmpty' => true,
+			),
+		'author_ip' => array(
+				'rule' => array('ip'),
+				'allowEmpty' => true,
+			),
+		'body' => array('notempty'),
+		'posted' => array(
+				'rule' => array('custom' ,'/^[12]\d{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/'),
+			),
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -16,30 +33,19 @@ class BookStandComment extends BookStandAppModel {
 			'foreignKey' => 'book_stand_article_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+			'counterCache' => true,
+			'counterScope' => '',
 		),
-/*		'User' => array(
-			'className' => 'User',
-			'foreignKey' => 'user_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'BookStandUser' => array(
-			'className' => 'BookStand.BookStandUser',
-			'foreignKey' => 'book_stand_user_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-*/		'BookStandCommentStatus' => array(
+		'BookStandCommentStatus' => array(
 			'className' => 'BookStand.BookStandCommentStatus',
 			'foreignKey' => 'book_stand_comment_status_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+			'counterCache' => true,
+			'counterScope' => '',
 		)
 	);
 
 }
-?>

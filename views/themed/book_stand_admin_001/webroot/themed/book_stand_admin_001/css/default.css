@@ -37,7 +37,6 @@ body {
 }
 a {
 	text-decoration: underline;
-	font-weight: bold;
 }
 a:hover {
 	color: #008000;
@@ -56,6 +55,10 @@ h2 {
 	margin: 0.3em 0;
 	padding-top: 0.8em;
 }
+#content h2 {
+	padding: 0.8em 0;
+	border-bottom: 1px solid #008000;
+}
 h3 {
 	padding-top: 1.5em;
 }
@@ -64,7 +67,7 @@ h4 {
 	padding-top: 0.5em;
 }
 ul, li {
-	margin: 0 12px;
+	margin: 0 0 0 12px;
 }
 
 /* Layout */
@@ -165,14 +168,15 @@ ul, li {
 #sidenav {
 	float: right;
 	width: 170px;
-	margin-bottom: -32768px;
 	padding: 10px;
-	padding-bottom: 32768px;
 	background: #f7f9fd;
 	color: #333;
 }
 
-
+#content , #sidenav {
+	margin-bottom: -32768px;
+	padding-bottom: 32768px;
+}
 
 #footer {
 	clear: both;
@@ -184,6 +188,8 @@ ul, li {
 	font-weight: bold;
 	text-align: center;
 }
+#footer a {color: #fff;text-decoration: none}
+#footer a:hover {text-decoration: underline;}
 
 /* Tables */
 table {
@@ -194,6 +200,7 @@ table {
 	color: #333;
 	margin-bottom: 10px;
 	width: 100%;
+	font-size: 85%;
 }
 th {
 	background: #d6e0f2;
@@ -218,17 +225,19 @@ table tr td {
 	border-right: 1px solid #ccc;
 	padding: 4px;
 	vertical-align: top;
-	font-size: 90%;
 }
 table tr.altrow td {
 	background: #fff;
+}
+table tr.important td {
+	background: #f0fff0;
 }
 td.actions {
 	text-align: center;
 	white-space: nowrap;
 }
 td.actions a {
-	margin: 0px 6px;
+	margin: 0px 2px;
 }
 .cake-sql-log table {
 	background: #f4f4f4;
@@ -279,45 +288,39 @@ dd {
 
 
 /* Notices and Errors */
-div.message {
-	clear: both;
-	color: #900;
-	font-size: 140%;
-	font-weight: bold;
-	margin: 1em 0;
+#content div.message , .notice , .success {
+	border: 1px solid;
+	margin: 10px 0px;
+	padding:10px 10px 10px 32px;
 }
-div.error-message {
-	clear: both;
-	color: #900;
+#content div.message {
+	color: #4F8A10;
+	font-size: 14px;
+	background: #DFF2BF url('../img/fam/information.png') no-repeat 10px center;
+}
+p.error, div.error_message {
+	border: 0px solid;
+	color: #D8000;
 	font-weight: bold;
 }
-p.error {
-	background-color: #e32;
-	color: #fff;
-	font-family: Courier, monospace;
-	font-size: 120%;
-	line-height: 140%;
-	padding: 0.8em;
-	margin: 1em 0;
+.notice {
+	color: #4F8A10;
+	background: #DFF2BF url('../img/fam/error.png') no-repeat 10px center;
+}
+.success {
+	color: #4F8A10;
+	background: #DFF2BF url('../img/fam/accept.png') no-repeat 10px center;
 }
 p.error em {
 	color: #000;
-	font-weight: normal;
+	font-weight: bold;
+	font-style: normal;
 	line-height: 140%;
 }
-.notice {
-	background: #ffcc00;
-	color: #000;
-	display: block;
-	font-family: Courier, monospace;
-	font-size: 120%;
-	line-height: 140%;
-	padding: 0.8em;
-	margin: 1em 0;
-}
-.success {
-	background: green;
-	color: #fff;
+form div.error {
+	color: #444;
+	border: 1px solid #f00;
+	background: #ffe4e1 url('../img/fam/exclamation.png') no-repeat 5px 5px;
 }
 
 /*  Actions  */
@@ -452,351 +455,22 @@ div.code-coverage-results span.result-good {
 	color: #0a0;
 }
 
-
-
-
-
-/* form.css */
-
-form {
-	margin: 0;
-	padding: 0;
-	font-size: 13px;
+/* Category Tree */
+#categorytree {
+	list-style-image: url('../img/fam/folder.png');
 }
+#categorytree ul { list-style-image: url('../img/fam/folder_page.png'); margin-bottom: 1em; }
+#categorytree ul ul { list-style-image: url('../img/fam/folder_page_white.png'); }
+#categorytree ul ul ul { list-style-image: url('../img/fam/folder.png'); }
+#categorytree ul ul ul ul { list-style-image: url('../img/fam/folder_page.png'); }
+#categorytree ul ul ul ul ul { list-style-image: url('../img/fam/folder_page_white.png'); }
 
-form fieldset {
-	clear: both;
-	font-size: 100%;
-	border-color: #006400;
-	border-width: 1px 0 0 0;
-	border-style: solid none none none;
-	padding: 5px 5px;
-	margin: 0 0 0 0;
-}
-
-form fieldset legend {
-	color: #006400;
-	font-size: 110%;
-	font-weight: bold;
-	margin: 0 0 0 10px;
-	padding: 0 5px;
-}
-
-label {
-	font-size: 100%;
-}
-
-label u {
-	font-style: normal;
-	text-decoration: underline;
-}
-
-input, select, textarea {
-	font-family: Tahoma, Arial, sans-serif;
-	font-size: 100%;
-	color: #000000;
-}
-
-textarea {
-	overflow: auto;
-}
-
-form div {
-	clear: left;
-	display: block;
-	zoom: 1;
-	margin: 5px 0 0 0;
-	padding: 1px 3px;
-	width: 504px;
-	/*border-bottom: 1px solid #f0f0f0;*/
-}
-form div.body {
-	width: 100%;
-}
-form .inputMax {
-	width: 360px;
-}
-
-form fieldset div.notes {
-	float: right;
-	width: 150px;
-	height: auto;
-	margin: 0 0 10px 10px;
-	padding: 5px;
-	border: 1px solid #666666;
-	background-color: #ffffe1;
-	color: #666666;
-	font-size: 95%;
-}
-
-form fieldset div.notes h4 {
-	background-image: url(../img/fam/information.png);
-	background-repeat: no-repeat;
-	background-position: top left;
-	padding: 3px 0 3px 20px;
-	border-width: 0 0 1px 0;
-	border-style: solid;
-	border-color: #666666;
-	color: #666666;
-	font-size: 100%;
-	font-weight: bold;
-}
-
-form fieldset div.notes div {
-	width: 140px;
-}
-
-form fieldset div.notes p {
-	margin: 0em 0em .5em 0em;
-	color: #666666;
-	font-size: 100%;
-}
-
-form fieldset div.notes p.last {
-	margin: 0em;
-}
-
-form div fieldset {
-	clear: none;
-	border: 1px solid #999;
-	margin: 0 0 0 140px;
-	padding: 0 5px 5px 5px;
-	width: 346px;
-}
-
-form div fieldset legend {
-	font-size: 100%;
-	padding: 0 3px 0 9px;
-	
-}
-
-form div.required fieldset legend {
-	font-weight: bold;
-}
-
-form div label {
-	display: block;
-	float: left;
-	width: 130px;
-	padding: 3px 5px;
-	margin: 0 0 5px 0;
-	text-align: right;
-}
-
-form div.optional label, label.optional {
-	font-weight: normal;
-}
-
-form div.required label, label.required {
-	font-weight: bold;
-}
-
-form div label.labelCheckbox, form div label.labelRadio {
-	float: none;
-	display: block;
-	width: 200px;
-	zoom: 1;
-	padding: 0;
-	margin: 0 0 5px 142px;
-	text-align: left;
-}
-
-form fieldset div.radio fieldset label {
-	display: inline;
-	float: none;
-	margin-right: 2em;
-	text-align: left;
-	cursor: pointer;
-}
-
-form div fieldset label.labelCheckbox, form div fieldset label.labelRadio {
-	margin: 0 0 5px 0;
-	width: 170px;
-}
-
-form div img {
-	border: 1px solid #000000;
-}
-
-p.error {
-	background-color: #ff0000;
-	background-image: url(/images/icon_error.gif);
-	background-repeat: no-repeat;
-	background-position: 3px 3px;
-	color: #ffffff;
-	padding: 3px 3px 5px 27px;
-	border: 1px solid #000000;
-	margin: auto 100px;
-}
-
-form div.error {
-	background-color: #ffffe1;
-	background-image: url(/images/required_bg.gif);
-	background-repeat: no-repeat;
-	background-position: top left;
-	color: #666666;
-	border: 1px solid #ff0000;
-}
-
-form div.error p.error {
-	background-image: url(/images/icon_error.gif);
-	background-position: top left;
-	background-color: transparent;
-	border-style: none;
-	font-size: 88%;
-	font-weight: bold;
-	margin: 0 0 0 118px;
-	width: 200px;
-	color: #ff0000;
-}
-
-form div select, form div textarea {
-/*	width: 200px;
-*/	padding: 1px 3px;
-	margin: 0 0 0 0;
-}
-
-form div input.inputText, form div input.inputPassword {
-	width: 200px;
-	padding: 1px 3px;
-	margin: 0 0 0 0;
-}
-
-form div input.inputFile {
-	width: 211px;
-}
-
-form div select.selectOne, form div select.selectMultiple {
-	width: 211px;
-	padding: 1px 3px;
-}
-
-form div input.inputCheckbox, form div input.inputRadio, input.inputCheckbox, input.inputRadio {
-	display: inline;
-	height: auto;
-	width: auto;
-	background-color: transparent;
-	border-width: 0;
-	padding: 0;
-	margin: 0 0 0 140px;
-}
-
-form div.submit {
-	width: 354px;
-	padding: 0 0 0 146px;
-}
-
-form div.submit input.default {
-	padding: 1em 2em;
-	background-color: #ffffe0;
-	font-weight: bold;
-	cursor: pointer;
-}
-
-form div.submit div {
-	display: inline;
-	float: left;
-	text-align: left;
-	width: auto;
-	padding: 0;
-	margin: 0;
-}
-
-form div input.inputSubmit, form div input.inputButton, input.inputSubmit, input.inputButton {
-	background-color: #cccccc;
-	color: #000000;
-	width: auto;
-	padding: 0 6px;
-	margin: 0;
-}
-
-form div.submit div input.inputSubmit, form div.submit div input.inputButton {
-	float: right;
-	margin: 0 0 0 5px;
-}
-
-form div small {
-	display: block;
-	margin: 0 0 5px 142px;
-	padding: 1px 3px;
-	font-size: 88%;
-	zoom: 1;
-}
-/* form.import.css */
-
-label img {
-	behavior: url(/behaviors/label_img.htc);
-}
-
-form fieldset legend {
-	line-height: 150%;
-}
-
-form input, form select, form textarea {
-	background-color: #ffffff;
-}
-
-form textarea.expanding {
-	overflow: auto;
-	overflow-x: auto;
-	overflow-y: visible;
-}
-
-div.optional label:before {
-	content: '';
-}
-
-div.required label:before {
-	content: '';
-}
-	
-form div label.labelCheckbox, form div label.labelRadio, label.labelCheckbox, label.labelRadio {
-	display: block;
-	width: 190px;
-	zoom: 1;
-	padding: 4px 0 0 18px;
-	text-indent: -18px;
-	line-height: 120%;
-}
-
-form div label.labelCheckbox input.inputCheckbox, form div label.labelRadio input.inputRadio, label.labelCheckbox input.inputCheckbox, label.labelRadio input.inputRadio {
-	margin: 0;
-}
-
-form div fieldset input.inputText, form div fieldset input.inputPassword, form div fieldset input.inputFile, form div fieldset textarea.inputTextarea {
-	width: 160px;
-	margin: 0 0 0 18px;
-	margin: expression(setCntr(), '0px 0 0 -124px');
-}
-
-form div label.compact {
-	display: inline;
-	width: auto;
-	padding: 4px 10px 0 0;
-	text-indent: 0;
-	margin: 0 0 0 0;
-}
-
-form div.wide label {
-	float: none;
-	display: block;
-}
-
-form div label.wide {
-	width: 348px;
-}
-
-form div.wide input.inputText, form div.wide input.inputPassword, form div.wide input.inputFile, form div.wide select, form div.wide textarea {
-	width: 344px;
-	margin: 0;
-}
-
-form div.notes p, form div small {
-	line-height: 125%;
-}
-
-form div.wide small {
-	margin: 0 0 5px 0;
+#categorytree .bsToggleCategory {
+	margin: 5px 5px 5px 0;
+	padding: 5px 5px 5px 26px;
+	border: 1px solid #008000;
+	border-right-width: 15px;
+	background: #f0fff0 url('../img/fam/page_white_edit.png') no-repeat 5px center ;
 }
 
 /* jQuery */
@@ -845,6 +519,8 @@ div.grippie {
 .marginLeft {		margin-left: 1em }
 a.linkoff{			color: #666;text-decoration: none }
 a.noLinks{			color: inherit;text-decoration: none}
+a.jslink{			color: #23b9f6;text-decoration: none}
+a.jslink:hover{		text-decoration: underline}
 dl.search_box dd a.noLinks{color: #999;}
 dl.search_box dd a.noLinks:hover{color: #999;}
 .likeLink {			color: #23b9f6;text-decoration: underline; cursor:pointer}
@@ -854,7 +530,23 @@ textarea.overflowScrollX {	overflow-x: scroll; }
 .JS .jsShowInline {	display: inline }
 .JS .jsShowBlock {	display: block }
 /*
+	with Icon
+*/
+a.add{		padding-left:18px;background-image:url('../img/fam/add.png');background-repeat: no-repeat;background-position: center left }
+a.movedown{	padding-left:15px;background-image:url('../img/fam/bullet_arrow_down.png');background-repeat: no-repeat;background-position: center left }
+a.moveup{	padding-left:15px;background-image:url('../img/fam/bullet_arrow_up.png');background-repeat: no-repeat;background-position: center left }
+a.revision{padding-left:18px;background-image:url('../img/fam/report.png');background-repeat: no-repeat;background-position: center left }
+span.author{padding-left:18px;background-image:url('../img/fam/user_suit.png');background-repeat: no-repeat;background-position: center left }
+span.book{	padding-left:18px;background-image:url('../img/fam/book.png');background-repeat: no-repeat;background-position: center left }
+span.category{padding-left:18px;background-image:url('../img/fam/sitemap_color.png');background-repeat: no-repeat;background-position: center left }
+span.comment{padding-left:18px;background-image:url('../img/fam/comment.png');background-repeat: no-repeat;background-position: center left }
+span.page ,a.page{	padding-left:18px;background-image:url('../img/fam/page.png');background-repeat: no-repeat;background-position: center left }
+span.tag{	padding-left:18px;background-image:url('../img/fam/tag_blue.png');background-repeat: no-repeat;background-position: center left }
+
+/*
 	ClearFix
 */
 .clearfix { overflow: hidden; }
 * html div.clearfix { height: 1%; }
+
+

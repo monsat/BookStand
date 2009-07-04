@@ -1,22 +1,16 @@
 <div id="bookStandArticlesEdit">
+<h2><?php echo $bs->revisionList() . $bs->span('ページの' . $bs->isAdd("新規追加","編集"),"page");?></h2>
 <?php
-	if ($bs->getAction() == 'add') {
-		echo $bs->tab(1, $form->create('BookStandArticle', $bs->urls() ));
-	} else {
-		echo $bs->tab(1,
-			$form->create('BookStandArticle',aa('url', $this->here) )
-			."\n".
-			$form->input('BookStandRevision.id' ,aa('type',"hidden"))
-		);
-	}
+	echo $bs->tab(1, $form->create('BookStandArticle',aa('url', $this->here)));
+	echo $bs->tab(1, $bs->isEdit($form->input('BookStandRevision.id',aa('type',"hidden") ) ,''));
 ?>
 
 	<fieldset>
-		<legend><?php echo h('ページの' . $bs->isAdd("新規追加","編集") );?></legend>
+		<legend><?php echo h('基本情報');?></legend>
 <?php
 	echo $bs->tab(2,
 		$bs->editNotes('基本情報について' ,array(
-			'<strong>Bookとは</strong>ページの集合を指します。通常はブログ全体をひとつのBookとするでしょう。',
+			'<strong>Bookとは</strong>ページの集合を指します。通常はブログ全体でひとつのBookとなります。',
 			'BookStandでは、複数のブログや複数の静的ページを管理できます。',
 			'<strong>Slugとは</strong>URLに組み込まれるキーワードです。URL以外に使用されません。'
 		),1)
@@ -30,14 +24,14 @@
 		$form->input('slug' ,aa('label',"英字Slug",'class',"inputMax"))
 		."\n".
 		$form->input('mbslug' ,aa('label',"日本語Slug",'class',"inputMax"))
+		."\n".
+		$form->input('book_stand_author_id')
 		//."\n".
-		//	$bs->tab(3, $form->input('book_stand_author_id')
-		//."\n".
-		//	$bs->tab(3, $form->input('book_stand_category_id')
+		//	$form->input('book_stand_category_id')
 		."\n".
 		$form->input('book_stand_revision_id' ,aa('type',"hidden"))
-		//."\n".
-		//	$bs->tab(3, $form->input('BookStandTag')
+		."\n".
+		$form->input('BookStandRevision.copied_body' ,aa('type',"hidden"))
 	);
 ?>
 
@@ -46,7 +40,7 @@
 		<legend><?php echo h('本文');?></legend>
 <?php
 	//	echo $bs->tab(3, $fck->input('BookStandRevision.body' ,aa('label',false,'class',"widthMax",'rows',Configure::read('BookStand.edit.rows'))) );
-	echo $bs->tab(3,
+	echo $bs->tab(2,
 		//	$form->input('BookStandRevision.body' ,aa('label',false,'class',"ckeditor"))
 		$bs->ckeditor('BookStandRevision.body' ,aa('label',false,'class','widthMax','rows',Configure::read('BookStand.edit.rows'),'div',aa('class','body')) )
 	);
@@ -71,30 +65,45 @@
 		$form->input('posted' ,aa('label',"表示する投稿日時",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-5,'maxYear',date('Y')+5,'monthNames',false))
 		."\n".
 		$form->input('book_stand_article_status_id' ,aa('label',"保存"))
-		."\n".
-		$bs->jquery(array(
-			'BookStandAdmin.toggle("#bsToggleSaveTypes");',
-			'BookStandAdmin.selectSaveChange();',
-		))
 	);
+	$bs->addScript(array(
+		'BookStandAdmin.toggle("#bsToggleSaveTypes");',
+		'BookStandAdmin.selectSaveChange();',
+	));
 ?>
 
-		<div id="bsToggleSaveTypesTarget" class="jsHide">
+		<div id="bsToggleSaveTypesTarget">
 <?php
 	echo $bs->tab(3,
-		$form->input('begin_publishing' ,aa('label',"公開日時",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-5,'maxYear',date('Y')+5,'monthNames',false))
+		$form->input('begin_publishing' ,aa('label',"公開日時",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-1,'maxYear',date('Y')+5,'monthNames',false))
 		."\n".
-		$form->input('end_publishing' ,aa('label',"公開終了",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-5,'maxYear',date('Y')+5,'monthNames',false))
+		$form->input('end_publishing' ,aa('label',"公開終了",'dateFormat',"YMD",'timeFormat',"24",'interval',60,'separator'," / ",'minYear',date('Y')-1,'empty',true,'monthNames',false))
 	);
 ?>
 
 		</div>
 	</fieldset>
 	<fieldset>
+		<legend><?php echo h('カテゴリ・タグ');?></legend>
+<?php
+	echo $bs->tab(2,
+		$bs->editNotes('タグについて' ,array(
+			'<strong>タグ</strong>を使ってページを分類することができます。',
+			'複数のタグを設定できます。',
+		),0)
+		."\n".
+		$form->input('BookStandTag' ,aa('label',"タグ" ,'type',"select" ,'multiple',"checkbox"))
+		."\n".
+		$form->input('book_stand_category_id' ,aa('label',"カテゴリ" ,'type',"select"))
+	);
+?>
+
+	</fieldset>
+	<fieldset>
 		<legend><?php echo h('記事の投稿');?></legend>
 <?php
 		echo $bs->tab(2,
-			$form->end(aa('label',$bs->isAdd("新規追加","編集を保存"),'class',"default floatRight",'before',$bs->link('編集を破棄し記事一覧に戻る' ,aa('action',"index",'class',"floatLeft"))))
+			$form->end(aa('label',$bs->isAdd("新規追加","編集を保存"),'class',"default floatRight" . ($bs->isAdd(' add','')),'before',$bs->link('編集を破棄し記事一覧に戻る' ,aa('action',"index",'class',"floatLeft"))))
 		);
 ?>
 

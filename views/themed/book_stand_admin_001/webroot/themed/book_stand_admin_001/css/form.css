@@ -1,0 +1,202 @@
+@CHARSET "UTF-8";
+
+/* form.css */
+
+form {
+	margin: 0;
+	padding: 0;
+	font-size: 13px;
+}
+form fieldset {
+	clear: both;
+	font-size: 100%;
+	border-color: #006400;
+	border-width: 1px 0 0 0;
+	border-style: solid none none none;
+	padding: 5px 5px;
+	margin: 0 0 0 0;
+}
+
+form fieldset legend {
+	color: #006400;
+	font-size: 110%;
+	font-weight: bold;
+	margin: 0 0 0 10px;
+	padding: 0 5px;
+}
+
+label {
+	font-size: 100%;
+}
+
+label u {
+	font-style: normal;
+	text-decoration: underline;
+}
+
+input, select, textarea {
+	font-family: Tahoma, Arial, sans-serif;
+	font-size: 100%;
+	color: #000000;
+}
+
+textarea {
+	overflow: auto;
+}
+
+form div {
+	clear: left;
+	display: block;
+	zoom: 1;
+	margin: 5px 0 0 0;
+	padding: 1px 3px;
+	width: 504px;
+}
+form div.body {
+	width: 100%;
+}
+form .inputMax {
+	width: 360px;
+}
+
+form fieldset div.notes {
+	float: right;
+	width: 150px;
+	height: auto;
+	margin: 0 0 10px 5px;
+	padding: 5px;
+	border: 1px solid #666666;
+	background-color: #ffffe1;
+	color: #666666;
+	font-size: 95%;
+}
+
+form fieldset div.notes h4 {
+	background-image: url(../img/fam/information.png);
+	background-repeat: no-repeat;
+	background-position: top left;
+	padding: 3px 0 3px 20px;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-color: #666666;
+	color: #666666;
+	font-size: 100%;
+	font-weight: bold;
+}
+
+form fieldset div.notes div {
+	width: 140px;
+}
+
+form fieldset div.notes p {
+	margin: 0em 0em .5em 0em;
+	color: #666666;
+	font-size: 100%;
+}
+
+form fieldset div.notes p.last {
+	margin: 0em;
+}
+
+form div.radio fieldset , form div.select fieldset {
+	clear: none;
+	border: 1px solid #999;
+	margin: 0 0 0 140px;
+	padding: 0 5px 5px 5px;
+	width: 346px;
+}
+form div.select fieldset {
+	padding: 5px;
+}
+form div.select div.checkbox {
+	clear: none;
+	margin: 0 0 0 140px;
+	padding: 0 5px 5px 5px;
+	width: 346px;
+}
+form div.select fieldset div.checkbox {
+	margin: 0;
+}
+form div fieldset legend {
+	font-size: 100%;
+	padding: 0 3px 0 9px;
+	
+}
+
+form div.required fieldset legend {
+	font-weight: bold;
+}
+
+form div label {
+	display: block;
+	float: left;
+	width: 130px;
+	padding: 3px 5px;
+	margin: 0 0 5px 0;
+	text-align: right;
+}
+
+form div.optional label, label.optional {
+	font-weight: normal;
+}
+
+form div.required label, label.required {
+	font-weight: bold;
+}
+form fieldset div.radio fieldset label , form fieldset div.select div.checkbox label {
+	display: inline;
+	float: none;
+	margin-right: 2em;
+	text-align: left;
+	cursor: pointer;
+}
+form div img {
+	border: 1px solid #000000;
+}
+form div.error {
+	color: #444;
+	border: 1px solid #f00;
+	background: #ffe4e1 url('../img/fam/exclamation.png') no-repeat 5px 5px;
+}
+
+form div select, form div textarea {
+	padding: 1px 3px;
+	margin: 0 0 0 0;
+}
+
+form div input.inputFile {
+	width: 211px;
+}
+
+form div.submit {
+	width: 354px;
+	padding: 0 0 0 146px;
+}
+
+form div.submit input.default {
+	padding: 1em 2em;
+	background-color: #ffffe0;
+	font-weight: bold;
+	cursor: pointer;
+}
+form div.submit input.add {
+	color: #008000;
+	background-color: #90ee90;
+}
+
+form div.submit div {
+	display: inline;
+	float: left;
+	text-align: left;
+	width: auto;
+	padding: 0;
+	margin: 0;
+}
+
+form div small {
+	display: block;
+	margin: 0 0 5px 142px;
+	padding: 1px 3px;
+	font-size: 88%;
+	zoom: 1;
+}

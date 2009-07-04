@@ -36,7 +36,17 @@
  * @subpackage    cake.cake.libs.model
  */
 class BookStandAppModel extends AppModel {
-	var $Controller;			// Controller参照用
+	/**
+	 * Controller参照用
+	 *
+	 * @var object controller class
+	 */
+	var $Controller;
 	
+	var $actsAs = array(
+		'BookStand.BookStandAgent',
+		'containable',
+	);
 	
+	function setDefault($type = 'common') { /* Override me */ }
 }

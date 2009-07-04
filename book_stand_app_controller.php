@@ -36,27 +36,61 @@
  * @subpackage    cake.cake.libs.controller
  */
 class BookStandAppController extends AppController {
-	/*
-	 * Models
+	/**
+	 * BookStandArticle Model
 	 * @var BookStandArticle
-	 * 
-	 * Components
-	 * @var BookStandToolComponent
-	 * @var BookStandAdminComponent
-	 * @var RequestHandlerComponent
-	 * @var SessionComponent
-	 * @var AuthComponent
-	 * @var AclComponent
-	 * @var QdmailComponent
 	 */
 	var $BookStandArticle;
+	/**
+	 * BookStandArticle Model
+	 * @var BookStandCategory
+	 */
+	var $BookStandCategory;
+	/**
+	 * BookStandArticle Model
+	 * @var BookStandComment
+	 */
+	var $BookStandComment;
+	/**
+	 * BookStandArticle Model
+	 * @var BookStandTag
+	 */
+	var $BookStandTag;
 	
+	/**
+	 * BookStandToolComponent Component
+	 * @var BookStandToolComponent
+	 */
 	var $BookStandTool;
+	/**
+	 * BookStandAdminComponent Component
+	 * @var BookStandAdminComponent
+	 */
 	var $BookStandAdmin;
+	/**
+	 * RequestHandlerComponent Component
+	 * @var RequestHandlerComponent
+	 */
 	var $RequestHandler;
+	/**
+	 * SessionComponent Component
+	 * @var SessionComponent
+	 */
 	var $Session;
+	/**
+	 * AclComponent Component
+	 * @var AclComponent
+	 */
 	var $Acl;
+	/**
+	 * AuthComponent Component
+	 * @var AuthComponent
+	 */
 	var $Auth;
+	/**
+	 * QdmailComponent Component
+	 * @var QdmailComponent
+	 */
 	var $Qdmail;
 	
 	var $components = array(
@@ -65,43 +99,15 @@ class BookStandAppController extends AppController {
 			'Session',
 		);
 	var $helpers = array(
-			'Bs',
+			'BookStand.Bs',
 			'Form',
 			'Text',
 			'Session',
+			'Cache',
 		);
 	function beforeFilter() {
-		// 設定初期値
-		$default_settings = array(
-			// Plugin Settings
-			'config' => array(
-				// This Plugin Version
-				'version' => "0.0.1",
-				// main
-				'db_scheme' => "1",
-				'theme' => "book_stand_default_001",		// 'Theme View'を使用しないときは ''
-				'admin_theme' => "book_stand_admin_001",		// 'Theme View'を使用しないときは ''
-				'admin' => 'admin',
-				// Debug Mode
-				'isDebug' => false,
-			),
-			// Site Info Settings
-			'info' => array(
-				'title' => "Blog Title",
-				'description' => "Blog Description",
-				'owner' => "Owner Name",
-				'owner_profile' => "Owner Profile",
-			),
-			// Edit
-			'edit' => array(
-				'editor' => true,
-				'config_path' => '',
-				'rows' => 10,
-				'isRevision' => true,
-			),
-		);
 		// ユーザー設定の読み込み
-		Configure::write('BookStand' ,Set::merge($default_settings ,Configure::read('BookStand')));
+		$this->BookStandTool->config();
 		// Session
 		// Book
 		if (empty($this->params['book'])) $this->params['book'] = Configure::read('BookStand.info.is_subdomain');
@@ -130,5 +136,61 @@ class BookStandAppController extends AppController {
 	
 	function beforeRender() {
 		parent::beforeRender();
+	}
+	
+	// Common Actions
+	
+	function admin_index() {
+		$this->{$this->modelClass}->recursive = 0;
+		$this->data = $this->paginate();
+	}
+	
+	function admin_add($id = null) {
+		if (!empty($this->data)) {
+			$this->{$this->modelClass}->create();
+			$this->{$this->modelClass}->set($this->data);
+			if ($this->{$this->modelClass}->save()) {
+				$this->BookStandTool->redirect(
+					'正常に投稿されました。',
+					array('action'=>'index')
+				);
+				return;
+			} else {
+				$this->Session->setFlash('修正が必要な項目があります。');
+			}
+		} elseif (!empty($id)) {
+			$this->data = $this->{$this->modelClass}->read(null, $id);
+			$this->data[ $this->modelClass ][ $this->{$this->modelClass}->primaryKey ] = null;
+			// default
+			$this->{$this->modelClass}->setDefault('add');
+		}
+		// default
+		$this->{$this->modelClass}->setDefault();
+		$this->render('admin_edit');
+	}
+
+	function admin_edit($id = null) {
+		if (!$id && empty($this->data)) {
+			$this->flash(__('Invalid BookStandBook', true), array('action'=>'index'));
+		}
+		if (!empty($this->data)) {
+			$this->{$this->modelClass}->set($this->data);
+			if ($this->{$this->modelClass}->save()) {
+				$this->BookStandTool->redirect(
+					'正常に投稿されました。',
+					array('action'=>'index')
+				);
+				return;
+			} else {
+				$this->Session->setFlash('修正が必要な項目があります。');
+			}
+		}
+		if (empty($this->data)) {
+			$this->data = $this->{$this->modelClass}->read(null, $id);
+			// default
+			$this->{$this->modelClass}->setDefault('edit');
+		}
+		// default
+		$this->{$this->modelClass}->setDefault();
 	}
 }

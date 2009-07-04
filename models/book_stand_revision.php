@@ -15,10 +15,12 @@ class BookStandRevision extends BookStandAppModel {
 			'foreignKey' => 'book_stand_article_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
-		)
+			'order' => '',
+			'counterCache' => true,
+			'counterScope' => '',
+		),
 	);
-
+/*
 	var $hasOne = array(
 		'BookStandArticle' => array(
 			'className' => 'BookStand.BookStandArticle',
@@ -29,6 +31,5 @@ class BookStandRevision extends BookStandAppModel {
 			'order' => ''
 		)
 	);
-
+*/
 }
-?>

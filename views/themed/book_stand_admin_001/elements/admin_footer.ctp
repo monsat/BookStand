@@ -1,0 +1,1 @@
+&copy; 2009 - <?php echo date('Y'); ?> <?php echo $bs->copyright(true); ?>.

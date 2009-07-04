@@ -3,22 +3,35 @@
  * BookStand Plugin Original Helper
  *
  */
-class BsHelper extends Helper
-{
+class BsHelper extends AppHelper {
+	/**
+	 * 当ヘルパーで使用するヘルパー
+	 * @var array
+	 */
 	var $helpers = array('Html' ,'Form' ,'Time' ,'Session' ,'Javascript');
-	var $monthNames = array('1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月');
+	/**
+	 * View参照用
+	 * @var object
+	 */
 	var $view;
-	var $develop;
+	/**
+	 * タグ変換用メソッド
+	 * @var array
+	 */
+	var $tags = array('_tagLinks');
 	
-	function __construct()
-	{
+	/**
+	 * 呼び出し元のViewを$this->viewに入れる
+	 */
+	function __construct() {
 		$this->view = ClassRegistry::getObject('view');
 		parent::__construct();
 	}
 	/**
 	 * HtmlHelper::linkの拡張
 	 * リバースルーティング用
-	 *
+	 * $html->link()の代わりに使用。pluginやbook等既定のパラメーターをセットします。
+	 * 
 	 * @param string $title 以下すべてHtmlHelperと同一
 	 * @param mixed $url
 	 * @param array $htmlattributes
@@ -47,18 +60,9 @@ class BsHelper extends Helper
 			}
 			$url = Set::merge($defaults ,$url);
 		}
-		//	debug($url);
-		//	debug(Router::url($url));
 		return $url;
 	}
-	/**
-	 * FormHelperの$options用URLを自動生成する
-	 *
-	 * @return array 出力文字列
-	 */
-	function urls() {
-		return array('url' => $this->url());
-	}
+	
 	/**
 	 * admin(prefix)ルーティング用に現在のアクションよりprefixを削除したアクション名を返す
 	 * ex) admin_index -> index
@@ -70,20 +74,43 @@ class BsHelper extends Helper
 		if (empty($view->params['admin'])) return $view->params['action'];
 		return substr($view->params['action'] ,strlen('admin') + 1);
 	}
-	
+	/**
+	 * 実行中のアクションが add or admin_add かどうかを判定します。
+	 * trueであれば第一引数に指定した文字列等をfalseであれば第二引数に指定した文字列等を返します。
+	 * デフォルトは true / false をそのまま返します。
+	 * @param mixed $true addアクション時に返すデータ
+	 * @param mixed $false addアクションではない時に返すデータ
+	 * @return mixed
+	 */
 	function isAdd($true = true ,$false = false) {
 		return $this->isAction($true ,$false );
 	}
+	/**
+	 * 実行中のアクションが edit or admin_edit かどうかを判定します。
+	 * trueであれば第一引数に指定した文字列等をfalseであれば第二引数に指定した文字列等を返します。
+	 * デフォルトは true / false をそのまま返します。
+	 * @param mixed $true editアクション時に返すデータ
+	 * @param mixed $false editアクションではない時に返すデータ
+	 * @return mixed
+	 */
 	function isEdit($true = true ,$false = false) {
 		return $this->isAction($true ,$false ,'edit');
 	}
+	/**
+	 * 実行中のアクションが 第三引数で指定したアクションかどうかを判定します。
+	 * trueであれば第一引数に指定した文字列等をfalseであれば第二引数に指定した文字列等を返します。
+	 * デフォルトは true / false をそのまま返します。
+	 * @param mixed $true editアクション時に返すデータ
+	 * @param mixed $false editアクションではない時に返すデータ
+	 * @return mixed
+	 */
 	function isAction($true = true ,$false = false ,$action = 'add') {
 		$is_action = $this->view->params['action'] == $action || $this->view->params['action'] == 'admin_' . $action;
 		return ($is_action) ? $true : $false;
 	}
 	// layout用
 	/**
-	 * htmlにタブを挿入する
+	 * htmlにタブを挿入します。
 	 *
 	 * @param int $n タブ数
 	 * @param string $output 入力文字列
@@ -91,13 +118,14 @@ class BsHelper extends Helper
 	 * @return string 出力文字列
 	 */
 	function tab($n = 1 ,$output = '' ,$code = "\n") {
+		if (!Configure::read('BookStand.edit.isTab')) return $output;
 		$lines = explode($code ,$output);
 		$tabs = str_repeat("\t" ,$n);
 		$out = implode($code . $tabs ,$lines);
 		return $out;
 	}
 	/**
-	 * エレメントのhtmlにタブを挿入する
+	 * エレメントのhtmlにタブを挿入します。
 	 *
 	 * @param int $n タブ数
 	 * @param string $element エレメント名
@@ -108,7 +136,16 @@ class BsHelper extends Helper
 	function tabElement($n ,$element ,$params = array() ,$loadHelpers = false) {
 		return $this->tab($n ,$this->view->element($element ,$params ,$loadHelpers));
 	}
-	
+	/**
+	 * canonical を生成します。
+	 * controllerにてcanonicalを設定している場合に動作します。
+	 * @return string canonicalが存在しない場合は空の文字列を返します。
+	 */
+	function canonical() {
+		$url = $this->view->getVar('canonical');
+		return empty($url) ? '' : "<link rel=\"canonical\" href=\"{$url}\" />";
+	}
+	// Article用
 	/**
 	 * 続きを読むリンク作成
 	 *
@@ -120,14 +157,56 @@ class BsHelper extends Helper
 	 * @return string 出力文字列
 	 */
 	function readMore($body ,$url = null ,$link_text = '続きを読む' ,$link_attr = array('rel' => 'nofollow') ,$separator = '<!-- BookStand Read More -->') {
-		$out = substr($body ,0 ,strpos($body ,$separator) + strlen($separator));
-		if (is_null($url)) return $out;
-		$out = '<div class="bookStandReadMore">' . $this->Html->link($link_text ,$this->url($url)) . '</div>';
+		if ($beforeSeparator = strpos($body ,$separator)) {
+			$out = substr($body ,0 ,$beforeSeparator + strlen($separator));
+		} else {
+			$out = $body;
+		}
+		if (is_null($url)) {
+			return $out;
+		} elseif ($beforeSeparator) {
+			$out .= '<div class="bookStandReadMore">' . $this->link($link_text ,$url ,$link_attr) . '</div>';
+		}
 		return $out;
 	}
 	/**
-	 * HEAD用JavaScript読み込みリンクを生成
-	 *
+	 * 本文中の特殊タグを変換します。
+	 * $this->tagsで指定したメソッドをすべて実行します。
+	 * @param string $body 変換前の本文
+	 * @return string 変換後の出力文字列
+	 */
+	function bsTags($body) {
+		$tags = $this->tags;
+		foreach ($tags as $tag) $body = $this->{$tag}($body);
+		return $body;
+	}
+	/**
+	 * [link id=n xxxx]をArticleID n のリンク文字列に置換します。
+	 * xxxxを指定しない場合は記事タイトルが使われます。
+	 * @param string $body
+	 * @return string
+	 */
+	function _tagLinks($body) {
+		$body = preg_replace_callback('/\[link id=([0-9]+)(\s(.+?))?\]/' ,array($this ,'_tagLinksCallback') ,$body);
+		return $body;
+	}
+		/**
+		 * _tagLinksメソッドで使用するコールバックメソッド
+		 * @param array $matches 正規表現のマッチ結果
+		 * @return string HTML文字列
+		 */
+		function _tagLinksCallback($matches) {
+			$api_url = $this->url(array('controller'=>"book_stand_articles",'action'=>"link",$matches[1]));
+			$data = unserialize( $this->view->requestAction(Router::url($api_url)) );
+			if (!is_array($data)) return $matches[0];
+			return $this->link(
+				empty($matches[3]) ? $data['BookStandArticle']['title'] : $matches[3],
+				$this->view->getVar('tool')->articleUrl('dynamic' ,$data)
+			);
+		}
+	// head用
+	/**
+	 * HEAD用JavaScript読み込みリンクを生成します。
 	 * @return string 出力文字列
 	 */
 	function head_js_load()
@@ -142,7 +221,7 @@ class BsHelper extends Helper
 				'jquery/jquery.corner',
 				'jquery/jquery.jgrowl',
 				'ckeditor/ckeditor',
-/*		
+			/*
 				'jquery/jquery.ui',
 				'jquery/jquery.ui.draggable',
 				'jquery/jquery.ui.resizable',
@@ -150,14 +229,13 @@ class BsHelper extends Helper
 				'wymeditor/jquery.wymeditor.pack',
 				'wymeditor/plugins/hovertools/jquery.wymeditor.hovertools',
 				'wymeditor/plugins/resizable/jquery.wymeditor.resizable',
-			
-*/
+			*/
 			)
 		);
 		return $out;
 	}
 	/**
-	 * JavaScript用リンクを生成
+	 * JavaScript用リンクを生成します。
 	 *
 	 * @param string $id ID属性
 	 * @param string $class class属性
@@ -165,24 +243,22 @@ class BsHelper extends Helper
 	 * @return string 出力文字列
 	 */
 	function jsLink($id ,$class='' ,$text = '開閉') {
+		$class = 'jslink ' . $class;
 		return $this->Html->link($text ,'javascript:void(0)' ,aa('id',$id,'class',$class));
 	}
 	/**
-	 * Wrap Script Tag and jQuery's window.onload
+	 * JavaScript等をheadに書き出します。
+	 * 配列で指定した場合は、複数行に分けて出力します。
 	 *
-	 * @param string $scripts JavaScript文字列
-	 * @param boolean $wrap trueでscriptタグ生成
+	 * @param mixed $scripts JavaScript等文字列
+	 * @param string $name 出力場所を指定 ex) title_for_layout content_for_layout cakeDebug
 	 * @return string output
 	 */
-	function jquery($scripts ,$wrap = true) {
-		if (is_array($scripts)) {
-			$scripts = implode("\n" ,$scripts);
-		}
-		$out = "$(function(){\n\t{$this->tab(1 ,$scripts)}\n});";
-		if (!empty($wrap)) {
-			$out = "<script type=\"text/javascript\">\n\t{$this->tab(1 ,$out)}\n</script>";
-		}
-		return $out;
+	function addScript($scripts) {
+		$scripts = implode("\n" ,(array)$scripts);
+		if (empty($this->view->__scripts['scripts_for_layout'])) $this->view->__scripts['scripts_for_layout'] = '';
+		$this->view->__scripts['scripts_for_layout'] .= $this->tab(3 ,$scripts);
+		return '';
 	}
 	/**
 	 * 編集画面用注意事項
@@ -194,21 +270,60 @@ class BsHelper extends Helper
 	 */
 	function editNotes($title ,$body = array() ,$hidden = 0) {
 		$out = "<h4>{$title}</h4>";
-		if (!is_array($body)) $body = array($body);
+		$body = (array)$body;
 		$last = count($body) - 1;
 		if ($hidden) $id = 'bsToggleHelp' . substr( md5($title . implode('' ,$body)) ,0 ,8 );
 		foreach ($body as $key => $p) {
-			$out .= ($key == $hidden ? $this->jquery("BookStandAdmin.toggle('#{$id}');") . '<div id="' . $id . 'Target" class="jsHide">' : '')
-					. '<p' . ($key == $last ? ' class="last">' : '>') . $p . '</p>'
-					. ($key == $last ? '</div>' : '')
-					. ($key == $last && $hidden != 0 ? '<div class="alignRight">' . $this->jsLink($id ,'' ,'すべて表示') . '</div>' : '');
+			if ($key == $hidden && $hidden != 0) {
+				$this->addScript("BookStandAdmin.toggle('#{$id}');");
+				$out .= '<div id="' . $id . 'Target" class="jsHide">';
+			}
+			$out .= '<p' . ($key == $last ? ' class="last">' : '>') . $p . '</p>'
+					. (($key == $last && $hidden != 0) ? '</div>' : '')
+					. (($key == $last && $hidden != 0) ? '<div class="alignRight">' . $this->jsLink($id ,'' ,'すべて表示') . '</div>' : '');
 		}
 		$out = '<div class="notes">' . $out . '</div>';
 		return $out;
 	}
+	
 	/**
-	 * CKeditor用のTextAreaを生成
-	 * configでCKeditorを使用しない場合は通常のTextAreaタグを出力
+	 * 見出し内に add action を追加します。
+	 *
+	 * @param string $wrap To wrap tags
+	 * @return string output
+	 */
+	function actionAdd($wrap = '<span class="floatRight">%s</span>') {
+		$out = $this->link('新規追加' ,$this->url(aa('action',"add")) ,aa('class',"add"));
+		return sprintf($wrap ,$out);
+	}
+	
+	/**
+	 * 見出し内に 履歴一覧リンク を追加します。
+	 *
+	 * @param string $wrap To wrap tags
+	 * @return string output
+	 */
+	function revisionList($wrap = '<span class="floatRight">%s</span>') {
+		if (empty($this->view->data['BookStandArticle']['id'])) return '';
+		$out = $this->link('履歴一覧' ,$this->url(array('controller'=>"book_stand_articles" ,'action'=>"revisions",$this->view->data['BookStandArticle']['id'])) ,aa('class',"revision"));
+		return sprintf($wrap ,$out);
+	}
+	
+	/**
+	 * span タグの生成
+	 *
+	 * @param string $text
+	 * @param string $class
+	 * @param boolean $escape If true ,escape text
+	 * @return string output
+	 */
+	function span($text ,$class ,$escape = true) {
+		if ($escape) $text = h($text);
+		return "<span class=\"{$class}\">{$text}</span>";
+	}
+	/**
+	 * CKeditor用のTextAreaを生成します。
+	 * configでCKeditorを使用しない場合は通常のTextAreaタグを出力します。
 	 *
 	 * @param string $fieldName FormHelper::inputと同一
 	 * @param array $options FormHelper用
@@ -225,15 +340,12 @@ class BsHelper extends Helper
 		// name
 		preg_match('/\sname="(.+?)"/' ,$out ,$results);
 		// output
-		$out .= "\n" .
-			$this->jquery(array(
-				"CKEDITOR.replace('{$results[1]}'{$config});",
-			));
+		$this->addScript("CKEDITOR.replace('{$results[1]}'{$config});");
 		return $out;
 	}
 	/**
-	 * 和暦対応 date()の拡張
-	 * 日付文字列に Vv年 と指定すると 昭和60年 のように出力可能
+	 * 和暦対応 date()の拡張します。
+	 * 日付文字列に Vv年 と指定すると 昭和60年 のように出力可能です。
 	 *
 	 * @param string $format date()と同一
 	 * @param int $timestamp date()と同一
@@ -282,5 +394,25 @@ class BsHelper extends Helper
 			$out = date($ymd, $date);
 		}
 		return $out;
+	}
+	
+	/**
+	 * 月別リスト作成用
+	 *
+	 * @param string $ym date('Ym') ex)200901
+	 * @return array
+	 */
+	function yearMonth($ym) {
+		$results = array(
+			'text' => substr($ym ,0 ,4) . '年' . substr($ym ,4 ,2) . '月',
+			'year' => substr($ym ,0 ,4),
+			'month' => substr($ym ,4 ,2),
+		);
+		return $results;
+	}
+	
+	function copyright($admin = false) {
+		$copies = ($admin) ? Configure::read('BookStand.admin_copyright') : Configure::read('BookStand.user_copyright');
+		return $this->link($copies['name'] ,$copies['url'] ,aa('class',"copyright"));
 	}
 }
