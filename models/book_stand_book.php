@@ -2,12 +2,12 @@
 class BookStandBook extends BookStandAppModel {
 	var $name = 'BookStandBook';
 	var $validate = array(
-		'name' => array(
+		'title' => array(
 				'rule' => array('maxlength' ,255),
 				'allowEmpty' => false,
 			),
 		'dir' => array(
-				'rule' => array('custom' ,'[a-z]{1,255}'),
+				'rule' => array('custom' ,'/[a-z]{1,255}/'),
 				'message' => '半角アルファベットで入力してください。',
 				'allowEmpty' => false,
 			),

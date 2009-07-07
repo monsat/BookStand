@@ -100,6 +100,7 @@ class BookStandAppController extends AppController {
 		);
 	var $helpers = array(
 			'BookStand.Bs',
+			'Html',
 			'Form',
 			'Text',
 			'Session',
