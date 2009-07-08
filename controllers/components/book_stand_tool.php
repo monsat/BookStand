@@ -7,6 +7,12 @@ class BookStandToolComponentForOverride extends Object
 	function startup(&$controller)
 	{
 		$this->Controller = $controller;
+		// admin auth
+		if (Configure::read('BookStand.admin_auth.basic') && !empty($this->Controller->params['admin'])) {
+			$this->Controller->Security->loginOptions = array('type'=>'basic');
+			$this->Controller->Security->loginUsers = array( Configure::read('BookStand.admin_auth.user') => Configure::read('BookStand.admin_auth.pw') );
+			$this->Controller->Security->requireLogin('*');
+		}
 	}
 	
 	function beforeRender() {
@@ -97,6 +103,11 @@ class BookStandToolComponentForOverride extends Object
 				'admin' => 'admin',
 				// Debug Mode
 				'isDebug' => false,
+			),
+			'admin_auth' => array(
+				'basic' => true,
+				'user' => 'admin',
+				'pw' => 'admin',
 			),
 			'override' => array(
 				'components' => false,						// componentsをoverrideするときは、ファイル名を指定する

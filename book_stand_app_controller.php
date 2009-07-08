@@ -78,6 +78,11 @@ class BookStandAppController extends AppController {
 	 */
 	var $Session;
 	/**
+	 * SecurityComponent Component
+	 * @var SecurityComponent
+	 */
+	var $Security;
+	/**
 	 * AclComponent Component
 	 * @var AclComponent
 	 */
@@ -97,6 +102,7 @@ class BookStandAppController extends AppController {
 			'BookStand.BookStandTool',
 //			'BookStand.BookStandAdmin',
 			'Session',
+			'Security',
 		);
 	var $helpers = array(
 			'BookStand.Bs',
