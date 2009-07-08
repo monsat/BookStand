@@ -1,0 +1,1 @@
+&copy; <?php echo date('Y'); ?> <?php echo $bs->copyright(); ?>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
