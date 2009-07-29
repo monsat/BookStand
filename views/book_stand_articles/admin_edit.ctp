@@ -50,38 +50,33 @@
 	<fieldset>
 		<legend><?php echo h('保存の設定');?></legend>
 <?php
-	echo $bs->tab(2,
-		$bs->editNotes('保存の設定について' ,array(
+	if ($bs->isAdd()) {
+		$note = $bs->editNotes('保存の設定について' ,array(
+			'<strong>下書き保存</strong>をすると、ページは公開されません。公開するときは今すぐ投稿するを選択してください。'
+		),0);
+	} else {
+		$note = $bs->editNotes('保存の設定について' ,array(
 			'<strong>編集の履歴とは</strong>過去の編集内容の記録です。編集に手違いがあった場合でも、簡単に差し戻すことができます。',
 			'上書き保存を選択すると、前回の編集内容は失います。',
-			'<strong>下書き保存</strong>をすると、ページは公開されません。公開するときは今すぐ投稿するを選択してください。'
-		),1)
+			'<strong>下書き保存</strong>をチェックすると、ページは公開されません。公開するときは今すぐ投稿するを選択してください。'
+		),1);
+	}
+	echo $bs->tab(2,
+		$note
 		."\n".
 		(empty($bookStandRevisionOptions) ? '' :
 			$form->input('is_revision' ,aa('type',"radio",'legend',"編集の履歴",'label',true,'options',$bookStandRevisionOptions,'default',(Configure::read('BookStand.edit.isRevision') == true ? 'create' : update) ) ) . "\n"
 		) .
-		$form->input('save_types' ,aa('label',"投稿",'options',$bookStandSaveTypes,'class',"",'after',$bs->jsLink('bsToggleSaveTypes')) )
-		."\n".
 		$form->input('posted' ,aa('label',"表示する投稿日時",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-5,'maxYear',date('Y')+5,'monthNames',false))
 		."\n".
-		$form->input('book_stand_article_status_id' ,aa('label',"保存"))
-	);
-	$bs->addScript(array(
-		'BookStandAdmin.toggle("#bsToggleSaveTypes");',
-		'BookStandAdmin.selectSaveChange();',
-	));
-?>
-
-		<div id="bsToggleSaveTypesTarget">
-<?php
-	echo $bs->tab(3,
+		$form->input('draft' ,aa('label',"下書き保存"))
+		."\n".
 		$form->input('begin_publishing' ,aa('label',"公開日時",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-1,'maxYear',date('Y')+5,'monthNames',false))
 		."\n".
 		$form->input('end_publishing' ,aa('label',"公開終了",'dateFormat',"YMD",'timeFormat',"24",'interval',60,'separator'," / ",'minYear',date('Y')-1,'empty',true,'monthNames',false))
 	);
 ?>
 
-		</div>
 	</fieldset>
 	<fieldset>
 		<legend><?php echo h('カテゴリ・タグ');?></legend>
@@ -103,7 +98,7 @@
 		<legend><?php echo h('記事の投稿');?></legend>
 <?php
 		echo $bs->tab(2,
-			$form->end(aa('label',$bs->isAdd("新規追加","編集を保存"),'class',"default floatRight" . ($bs->isAdd(' add','')),'before',$bs->link('編集を破棄し記事一覧に戻る' ,aa('action',"index",'class',"floatLeft"))))
+			$form->end(aa('label',$bs->isAdd("新規追加","編集を保存"),'class',"default floatRight" . ($bs->isAdd(' add',''))))
 		);
 ?>
 

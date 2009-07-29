@@ -102,6 +102,7 @@ class BookStandAppController extends AppController {
 			'BookStand.BookStandTool',
 //			'BookStand.BookStandAdmin',
 			'Session',
+			'RequestHandler',
 			'Security',
 		);
 	var $helpers = array(
@@ -199,5 +200,9 @@ class BookStandAppController extends AppController {
 		}
 		// default
 		$this->{$this->modelClass}->setDefault();
+	}
+	
+	function blackHoleCallback($error) {
+		debug($error);
 	}
 }

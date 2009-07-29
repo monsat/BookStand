@@ -23,6 +23,12 @@ class BookStandArticle extends BookStandAppModel {
 		'posted' => array(
 				'rule' => array('custom' ,'/^[12]\d{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/'),
 			),
+		'draft' => array(
+				'rule' => array('boolean'),
+			),
+		'reserved' => array(
+				'rule' => array('boolean'),
+			),
 		'begin_publishing' => array(
 				'rule' => array('custom' ,'/^[12]\d{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/'),
 				'allowEmpty' => true,
@@ -50,15 +56,6 @@ class BookStandArticle extends BookStandAppModel {
 		'BookStandBook' => array(
 			'className' => 'BookStand.BookStandBook',
 			'foreignKey' => 'book_stand_book_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'counterCache' => true,
-			'counterScope' => '',
-		),
-		'BookStandArticleStatus' => array(
-			'className' => 'BookStand.BookStandArticleStatus',
-			'foreignKey' => 'book_stand_article_status_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -190,43 +187,56 @@ class BookStandArticle extends BookStandAppModel {
 	}
 	/**
 	 * 投稿ステータスを自動生成
+	 * attribute behavior
 	 *
 	 * @param array $article 単一記事データ
 	 * @return array 修正済みの単一記事データ
 	 */
 	function posted_status($article) {
-		if (
-			empty($article['BookStandArticle']['book_stand_article_status_id']) ||
-			empty($article['BookStandArticle']['modified'])
-		) return $article;
+		$article = $article['BookStandArticle'];
+		// 通常のfind以外では使用しない
+		if (!isset($article['begin_publishing'],$article['modified'])) {
+			return null;
+		}
 		$results = array();
 		$defaults = array(
 			'status' => '公開' ,
 			'date_type' => '公開' ,
 			'icon' => 'accept' ,
-			'date' => $article['BookStandArticle']['begin_publishing'] ,
-			'is_draft' => false,
-			'is_deleted' => false,
+			'date' => $article['begin_publishing'] ,
 		);
-		// draft
-		if ($article['BookStandArticle']['book_stand_article_status_id'] == 1) {
-			$results = array('status' => '下書き' ,'date_type' => '最終更新' ,'icon' => 'pencil' ,'date' => $article['BookStandArticle']['modified'] ,'is_draft' => true);
-		} elseif ($date = $this->is_deleted()) {
-		// deleted
-			$results = array('status' => '公開終了' ,'date_type' => '公開終了' ,'icon' => 'calendar_delete' ,'date' => $date ,'is_deleted' => true);
-		} elseif (strtotime($article['BookStandArticle']['begin_publishing']) > time()) {
-		// reserved
-			$results['status'] = '投稿予約';
-			$results['icon'] = 'calendar_delete';
+		if (!empty($article['deleted'])) {
+			// deleted
+			$results = array(
+				'status' => '削除' ,
+				'date_type' => '削除' ,
+				'icon' => 'calendar_delete' ,
+				'date' => $article['modified'] ,
+			);
+		} elseif (!empty($article['draft'])) {
+			// draft
+			$results = array(
+				'status' => '下書き' ,
+				'date_type' => '最終更新' ,
+				'icon' => 'pencil' ,
+				'date' => $article['modified'] ,
+			);
+		} elseif (!empty($article['end_publishing']) && strtotime($article['end_publishing']) < time()) {
+			// end publishing
+			$results = array(
+				'status' => '公開終了' ,
+				'date_type' => '公開終了' ,
+				'icon' => 'calendar_delete' ,
+				'date' => $article['end_publishing'] ,
+			);
+		} elseif (strtotime($article['begin_publishing']) > time()) {
+			// reserved
+			$results = array(
+				'status' => '投稿予約',
+				'icon' => 'calendar_delete',
+			);
 		}
 		return Set::merge($defaults ,$results);
-	}
-	function is_deleted($current_data = null) {
-		if (is_null($current_data)) $current_data = $this->data;
-		if ($current_data['BookStandArticle']['deleted'] == true) return $current_data['BookStandArticle']['deleted_time'];
-		if ($current_data['BookStandArticle']['book_stand_article_status_id'] == 4) return $current_data['BookStandArticle']['end_publishing'];
-		if (strtotime($current_data['BookStandArticle']['end_publishing']) < time()) return $current_data['BookStandArticle']['end_publishing'];
-		return false;
 	}
 	
 	function setDefault($type = 'common') {
@@ -242,13 +252,13 @@ class BookStandArticle extends BookStandAppModel {
 			default:
 				$bookStandBooks = $this->BookStandBook->find('list');
 				$bookStandSaveTypes = $this->save_types;
-				$bookStandArticleStatuses = $this->BookStandArticleStatus->find('list');
+//				$bookStandArticleStatuses = $this->BookStandArticleStatus->find('list');
 		
 				$bookStandTags = $this->BookStandTag->find('list');
 				$bookStandAuthors = $this->BookStandAuthor->find('list');
 				$bookStandCategories = $this->BookStandCategory->generatetreelist(null ,null ,null ,'-> ');
 //				$this->Controller->set(compact('bookStandBooks','bookStandSaveTypes','bookStandRevisionOptions','bookStandTags', 'bookStandReferenceArticles', 'bookStandArticleStatuses', 'bookStandAuthors', 'bookStandCategories', 'bookStandRevisions'));
-				$this->Controller->set(compact('bookStandBooks','bookStandSaveTypes','bookStandRevisionOptions', 'bookStandArticleStatuses','bookStandTags', 'bookStandAuthors', 'bookStandCategories'));
+				$this->Controller->set(compact('bookStandBooks','bookStandSaveTypes','bookStandRevisionOptions','bookStandTags', 'bookStandAuthors', 'bookStandCategories'));
 		}
 	}
 	

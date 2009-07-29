@@ -33,9 +33,9 @@ echo $paginator->counter(array(
 		<td>
 <?php
 		echo $bs->link($article['BookStandArticle']['title'] ,array('action'=>"edit",$article['BookStandArticle']['id']) ,aa('title' ,$article['BookStandArticle']['title'] . 'を編集する') );
-		if ($article['BookStandArticle']['posted_status']['is_draft']) {
+		if ($article['BookStandArticle']['draft']) {
 			echo $html->link($html->image('fam/page_white_edit.png'), $bs->url(array('action'=>'edit',$article['BookStandArticle']['id']) ) ,aa('title',"下書き" ,'alt',"下書き") ,null ,false);
-		} elseif ($article['BookStandArticle']['posted_status']['is_deleted']) {
+		} elseif ($article['BookStandArticle']['deleted']) {
 			echo $html->image('fam/page_white_delete.png' ,aa('title',"削除済み" ,'alt',"削除済み"));
 		}
 ?>

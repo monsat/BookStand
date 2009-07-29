@@ -7,11 +7,22 @@ class BookStandToolComponentForOverride extends Object
 	function startup(&$controller)
 	{
 		$this->Controller = $controller;
-		// admin auth
-		if (Configure::read('BookStand.admin_auth.basic') && !empty($this->Controller->params['admin'])) {
-			$this->Controller->Security->loginOptions = array('type'=>'basic');
-			$this->Controller->Security->loginUsers = array( Configure::read('BookStand.admin_auth.user') => Configure::read('BookStand.admin_auth.pw') );
-			$this->Controller->Security->requireLogin('*');
+		// security
+		if (!empty($this->Controller->Security)) {
+			// not use require auth
+			$this->Controller->Security->validatePost = false;
+			// admin auth
+			if (Configure::read('BookStand.admin_auth.basic') && !empty($this->Controller->params['admin'])) {
+				$this->Controller->Security->loginOptions = array('type'=>'basic');
+				$this->Controller->Security->loginUsers = array(
+					Configure::read('BookStand.admin_auth.user') => Configure::read('BookStand.admin_auth.pw'),
+				);
+				$this->Controller->Security->requireLogin('*');
+			}
+			// admin post
+			if (Configure::read('BookStand.config.isDebug')) {
+				$this->Controller->Security->blackHoleCallback = 'blackHoleCallback';
+			}
 		}
 	}
 	

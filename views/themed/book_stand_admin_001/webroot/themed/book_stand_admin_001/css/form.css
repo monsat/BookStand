@@ -114,6 +114,12 @@ form div.select div.checkbox {
 	padding: 0 5px 5px 5px;
 	width: 346px;
 }
+form div.input.checkbox {
+	clear: none;
+	margin: 5px 0 0 140px;
+	padding: 0 5px 5px 5px;
+	width: 346px;
+}
 form div.select fieldset div.checkbox {
 	margin: 0;
 }
@@ -143,7 +149,7 @@ form div.optional label, label.optional {
 form div.required label, label.required {
 	font-weight: bold;
 }
-form fieldset div.radio fieldset label , form fieldset div.select div.checkbox label {
+form fieldset div.radio fieldset label , form fieldset div.select div.checkbox label , form div.input.checkbox label {
 	display: inline;
 	float: none;
 	margin-right: 2em;
