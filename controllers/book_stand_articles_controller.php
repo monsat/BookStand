@@ -30,13 +30,22 @@ class BookStandArticlesController extends BookStandAppController {
 	}
 	
 	function view($id = null) {
-		if (!$id && empty($this->params['id'])) {
+		$conditions = array();
+		if (!empty($id)) {
+			$conditions = array(
+				'BookStandArticle.id' => $id,
+			);
+		} else {
+			foreach ($this->params as $key => $value) {
+				if (!in_array($key ,array('id','slug','mbslug'))) {
+					continue;
+				}
+				$conditions['BookStandArticle.' . $key] = $value;
+			}
+		}
+		if (empty($conditions)) {
 			$this->BookStandTool->redirect('ページが見つかりません', array('action'=>'index'));
 		}
-		$id = empty($this->params['id']) ? $id : $this->params['id'];
-		$conditions = array(
-			'BookStandArticle.id' => $id,
-		);
 		$published = true;
 		$this->data = $this->BookStandArticle->find('first', compact('conditions','published'));
 		if (empty($this->data)) {
