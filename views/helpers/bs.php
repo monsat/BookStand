@@ -50,13 +50,17 @@ class BsHelper extends AppHelper {
 	 */
 	function url($url = array()) {
 		if (is_array($url)) {
-			$defaults = array(
-				'book' => $this->view->params['book'],
-				'plugin' => 'book_stand',
-			);
 			// for admin routing
-			if (!empty($this->view->params['admin'])) {
-				$defaults = Set::merge($defaults ,array('admin' => true));
+			if (!empty($this->view->params['admin']) && (!isset($url['admin']) || $url['admin'] !== false)) {
+				$defaults = array(
+					'admin' => true,
+					'plugin' => 'book_stand',
+				);
+			} else {
+				$defaults = array(
+					'book' => empty($this->view->params['book']) ? Configure::read('BookStand.dir.dynamics') : $this->view->params['book'],
+					'plugin' => 'book_stand',
+				);
 			}
 			$url = Set::merge($defaults ,$url);
 		}
@@ -196,7 +200,7 @@ class BsHelper extends AppHelper {
 		 * @return string HTML文字列
 		 */
 		function _tagLinksCallback($matches) {
-			$api_url = $this->url(array('controller'=>"book_stand_articles",'action'=>"link",$matches[1]));
+			$api_url = $this->url(array('controller'=>"book_stand_articles",'action'=>"link",'admin'=>false,$matches[1]));
 			$data = unserialize( $this->view->requestAction(Router::url($api_url)) );
 			if (!is_array($data)) return $matches[0];
 			return $this->link(

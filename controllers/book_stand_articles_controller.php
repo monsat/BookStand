@@ -7,7 +7,11 @@ class BookStandArticlesController extends BookStandAppController {
 
 	function beforeFilter() {
 		parent::beforeFilter();
-		$this->BookStandArticle->belongsTo['BookStandCategory']['counterScope'] = $this->BookStandArticle->publishConditions();
+		$this->BookStandArticle->belongsTo['BookStandCategory']['counterScope'] =
+			Set::merge(
+				$this->BookStandArticle->publishConditions(),
+				array('draft' => 0)
+			);
 	}
 	function index() {
 		if (!empty($this->params['type'])) {
@@ -20,9 +24,12 @@ class BookStandArticlesController extends BookStandAppController {
 		}
 		if (empty($this->data)) {
 			$this->BookStandArticle->recursive = 0;
-			$this->paginate = array(
-				'published' => true,
+			$conditions = array(
+				'BookStandArticle.static' => 0,
+				'BookStandArticle.draft' => 0,
 			);
+			$published = true;
+			$this->paginate = compact('published','conditions');
 			$this->data = $this->paginate();
 		}
 		
@@ -37,14 +44,19 @@ class BookStandArticlesController extends BookStandAppController {
 			);
 		} else {
 			foreach ($this->params as $key => $value) {
-				if (!in_array($key ,array('id','slug','mbslug'))) {
-					continue;
+				if (in_array($key ,array('id','slug'))) {
+					$conditions['BookStandArticle.' . $key] = $value;
 				}
-				$conditions['BookStandArticle.' . $key] = $value;
 			}
 		}
 		if (empty($conditions)) {
 			$this->BookStandTool->redirect('ページが見つかりません', array('action'=>'index'));
+		}
+		if (empty($this->params['admin'])) {
+			$conditions = Set::merge($conditions ,array('BookStandArticle.draft'=>0));
+		} else {
+			// admin_viewの場合は下書きも表示
+			$this->Session->setFlash( 'プレビュー' );
 		}
 		$published = true;
 		$this->data = $this->BookStandArticle->find('first', compact('conditions','published'));
@@ -64,9 +76,12 @@ class BookStandArticlesController extends BookStandAppController {
 	}
 	
 	function monthly_list($is_zero = false) {
-		$contain = array();
 		$published = true;
-		$articles = $this->BookStandArticle->find('all' ,compact('contain','published'));
+		$conditions = array(
+			'BookStandArticle.static' => 0,
+			'BookStandArticle.draft' => 0,
+		);
+		$articles = $this->BookStandArticle->find('all' ,compact('conditions','published'));
 		$results = array();
 		foreach ($articles as $article) {
 			$month = date('Ym' ,strtotime($article['BookStandArticle']['posted']));
@@ -78,10 +93,30 @@ class BookStandArticlesController extends BookStandAppController {
 		}
 		return $results;
 	}
-
+	function static_list() {
+		$published = true;
+		$conditions = array(
+			'BookStandArticle.static' => 1,
+			'BookStandArticle.draft' => 0,
+		);
+		$articles = $this->BookStandArticle->find('all' ,compact('conditions','published'));
+		return $articles;
+	}
+	
 	function admin_index() {
 		$this->BookStandArticle->recursive = 0;
+		$conditions = array(
+		);
+		$this->paginate = array(
+			'conditions' => $conditions,
+		);
 		$this->data = $this->paginate();
+	}
+
+	function admin_view($id = null) {
+		$this->setAction('view' ,$id);
+		$this->theme = Configure::read('BookStand.config.theme');
+		$this->render('view');
 	}
 
 	function admin_add($id = null) {

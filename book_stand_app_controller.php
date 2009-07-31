@@ -118,20 +118,18 @@ class BookStandAppController extends AppController {
 		$this->BookStandTool->config();
 		// Session
 		// Book
-		if (empty($this->params['book'])) $this->params['book'] = Configure::read('BookStand.info.is_subdomain');
+		if (empty($this->params['book'])) {
+			$this->params['book'] = Configure::read('BookStand.info.is_subdomain');
+		}
 		// Theme
-		if (empty($this->params[ Configure::read('BookStand.config.admin') ])) {
+		if (empty($this->params['admin']) && Configure::read('BookStand.config.theme') !== '') {
 			// User Theme
-			if (Configure::read('BookStand.config.theme') !== '') {
-				$this->view = 'Theme';
-				$this->theme = Configure::read('BookStand.config.theme');
-			}
-		} else {
+			$this->view = 'Theme';
+			$this->theme = Configure::read('BookStand.config.theme');
+		} elseif (Configure::read('BookStand.config.admin_theme') !== '') {
 			// Admin Theme
-			if (Configure::read('BookStand.config.admin_theme') !== '') {
-				$this->view = 'Theme';
-				$this->theme = Configure::read('BookStand.config.admin_theme');
-			}
+			$this->view = 'Theme';
+			$this->theme = Configure::read('BookStand.config.admin_theme');
 		}
 		// Debug Mode
 		if (Configure::read('BookStand.config.isDebug')) {

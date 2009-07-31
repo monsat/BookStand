@@ -16,10 +16,6 @@ class BookStandArticle extends BookStandAppModel {
 				'rule' => array('maxlength' ,255),
 				'allowEmpty' => true,
 			),
-		'mbslug' => array(
-				'rule' => array('maxlength' ,255),
-				'allowEmpty' => true,
-			),
 		'posted' => array(
 				'rule' => array('custom' ,'/^[12]\d{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/'),
 			),
@@ -51,17 +47,7 @@ class BookStandArticle extends BookStandAppModel {
 		'create' => '履歴を残して保存',
 	);
 	
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
-		'BookStandBook' => array(
-			'className' => 'BookStand.BookStandBook',
-			'foreignKey' => 'book_stand_book_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'counterCache' => true,
-			'counterScope' => '',
-		),
 		'BookStandAuthor' => array(
 			'className' => 'BookStand.BookStandAuthor',
 			'foreignKey' => 'book_stand_author_id',
@@ -133,21 +119,6 @@ class BookStandArticle extends BookStandAppModel {
 			'insertQuery' => '',
 			'counterScope' => array(),
 		),
-		'RelatedArticle' => array(
-			'className' => 'BookStand.BookStandArticle',
-			'joinTable' => 'book_stand_relations',
-			'foreignKey' => 'book_stand_article_id',
-			'associationForeignKey' => 'book_stand_related_article_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		)
 	);
 	
 	function beforeSave() {
@@ -169,7 +140,10 @@ class BookStandArticle extends BookStandAppModel {
 	// HABTM用条件追加
 	function habtmCounterScope($field) {
 		if ($field != 'book_stand_article_count') return array();
-		return array('book_stand_article_id' => array_values($this->find('list' ,aa('fields',"id" ,'published',true))));
+		$fields = 'id';
+		$published = true;
+		$conditions = array('draft' => 0);
+		return array('book_stand_article_id' => array_values($this->find('list' ,compact('fields','published','conditions'))));
 	}
 	
 	function resetRevisionIdIfCreate() {
@@ -193,9 +167,9 @@ class BookStandArticle extends BookStandAppModel {
 	 * @return array 修正済みの単一記事データ
 	 */
 	function posted_status($article) {
-		$article = $article['BookStandArticle'];
+		$Article = $article['BookStandArticle'];
 		// 通常のfind以外では使用しない
-		if (!isset($article['begin_publishing'],$article['modified'])) {
+		if (!isset($Article['begin_publishing'],$Article['modified'])) {
 			return null;
 		}
 		$results = array();
@@ -203,37 +177,42 @@ class BookStandArticle extends BookStandAppModel {
 			'status' => '公開' ,
 			'date_type' => '公開' ,
 			'icon' => 'accept' ,
-			'date' => $article['begin_publishing'] ,
+			'date_icon' => 'accept' ,
+			'date' => $Article['begin_publishing'] ,
 		);
 		if (!empty($article['deleted'])) {
 			// deleted
 			$results = array(
 				'status' => '削除' ,
 				'date_type' => '削除' ,
-				'icon' => 'calendar_delete' ,
-				'date' => $article['modified'] ,
+				'icon' => 'page_white_delete' ,
+				'date_icon' => 'calendar_delete' ,
+				'date' => $Article['modified'] ,
 			);
-		} elseif (!empty($article['draft'])) {
+		} elseif (!empty($Article['draft'])) {
 			// draft
 			$results = array(
 				'status' => '下書き' ,
 				'date_type' => '最終更新' ,
-				'icon' => 'pencil' ,
-				'date' => $article['modified'] ,
+				'icon' => 'page_white_edit' ,
+				'date_icon' => 'pencil' ,
+				'date' => $Article['modified'] ,
 			);
-		} elseif (!empty($article['end_publishing']) && strtotime($article['end_publishing']) < time()) {
+		} elseif (!empty($Article['end_publishing']) && strtotime($Article['end_publishing']) < time()) {
 			// end publishing
 			$results = array(
 				'status' => '公開終了' ,
 				'date_type' => '公開終了' ,
 				'icon' => 'calendar_delete' ,
-				'date' => $article['end_publishing'] ,
+				'date_icon' => 'calendar_delete' ,
+				'date' => $Article['end_publishing'] ,
 			);
-		} elseif (strtotime($article['begin_publishing']) > time()) {
+		} elseif (strtotime($Article['begin_publishing']) > time()) {
 			// reserved
 			$results = array(
 				'status' => '投稿予約',
-				'icon' => 'calendar_delete',
+				'icon' => 'calendar_add',
+				'date_icon' => 'calendar_add' ,
 			);
 		}
 		return Set::merge($defaults ,$results);
@@ -250,26 +229,25 @@ class BookStandArticle extends BookStandAppModel {
 		
 			break;
 			default:
-				$bookStandBooks = $this->BookStandBook->find('list');
 				$bookStandSaveTypes = $this->save_types;
-//				$bookStandArticleStatuses = $this->BookStandArticleStatus->find('list');
 		
 				$bookStandTags = $this->BookStandTag->find('list');
 				$bookStandAuthors = $this->BookStandAuthor->find('list');
 				$bookStandCategories = $this->BookStandCategory->generatetreelist(null ,null ,null ,'-> ');
-//				$this->Controller->set(compact('bookStandBooks','bookStandSaveTypes','bookStandRevisionOptions','bookStandTags', 'bookStandReferenceArticles', 'bookStandArticleStatuses', 'bookStandAuthors', 'bookStandCategories', 'bookStandRevisions'));
-				$this->Controller->set(compact('bookStandBooks','bookStandSaveTypes','bookStandRevisionOptions','bookStandTags', 'bookStandAuthors', 'bookStandCategories'));
+				$this->Controller->set(compact('bookStandSaveTypes','bookStandRevisionOptions','bookStandTags', 'bookStandAuthors', 'bookStandCategories'));
 		}
 	}
 	
 	function getTypeToOptions($type ,$names) {
 		$data = array();
+		$params = $this->Controller->params;
+		$conditions = array(
+			'BookStandArticle.draft' => 0,
+		);
+		$published = true;
 		switch ($type) {
 			case 'categories':
-				$conditions = array(
-					'BookStandCategory.name' => $names[1],
-				);
-				$published = true;
+				$conditions['BookStandCategory.name'] = $names[1];
 				return compact('conditions','published');
 			break;
 			case 'tags':
@@ -290,14 +268,10 @@ class BookStandArticle extends BookStandAppModel {
 					$tag_ids = array_keys( array_filter($counter ,array($this ,'_filter_id')) );
 				}
 				
-				$conditions = array(
-					'BookStandArticle.id' => $tag_ids,
-				);
-				$published = true;
+				$conditions['BookStandArticle.id'] = $tag_ids;
 				return compact('conditions','published');
 				break;
 			case 'date':
-				$params = $this->Controller->params;
 				if (empty($params['day'])) {
 					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) ,1 ,$params['year']));
 					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) + 1 ,0 ,$params['year']));
@@ -305,9 +279,7 @@ class BookStandArticle extends BookStandAppModel {
 					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) ,intval($params['day']) ,$params['year']));
 					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) ,intval($params['day']) ,$params['year']));
 				}
-				$conditions = array(
-					'BookStandArticle.posted BETWEEN ? AND ?' => $dates,
-				);
+				$conditions['BookStandArticle.posted BETWEEN ? AND ?'] = $dates;
 				return compact('conditions');
 			break;
 		}

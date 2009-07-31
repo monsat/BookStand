@@ -10,24 +10,20 @@
 <?php
 	echo $bs->tab(2,
 		$bs->editNotes('基本情報について' ,array(
-			'<strong>Bookとは</strong>ページの集合を指します。通常はブログ全体でひとつのBookとなります。',
-			'BookStandでは、複数のブログや複数の静的ページを管理できます。',
+			'<strong>静的ページとは</strong>通常のブログのページではなく、日付別に管理されないページを指します。',
+			'サイトマップやAbout Usのようなページは、静的ページとして作成すると良いでしょう。',
 			'<strong>Slugとは</strong>URLに組み込まれるキーワードです。URL以外に使用されません。'
 		),1)
 		."\n".
 		$form->input('id')
 		."\n".
-		$form->input('book_stand_book_id' ,aa('label',"Book選択",'default',$session->read('BookStand.book_id')))
+		$form->input('static' ,aa('label',"静的ページ"))
 		."\n".
 		$form->input('title' ,aa('label',"タイトル",'class',"inputMax"))
 		."\n".
-		$form->input('slug' ,aa('label',"英字Slug",'class',"inputMax"))
-		."\n".
-		$form->input('mbslug' ,aa('label',"日本語Slug",'class',"inputMax"))
+		$form->input('slug' ,aa('label',"Slug",'class',"inputMax"))
 		."\n".
 		$form->input('book_stand_author_id')
-		//."\n".
-		//	$form->input('book_stand_category_id')
 		."\n".
 		$form->input('book_stand_revision_id' ,aa('type',"hidden"))
 		."\n".
@@ -39,9 +35,7 @@
 	<fieldset>
 		<legend><?php echo h('本文');?></legend>
 <?php
-	//	echo $bs->tab(3, $fck->input('BookStandRevision.body' ,aa('label',false,'class',"widthMax",'rows',Configure::read('BookStand.edit.rows'))) );
 	echo $bs->tab(2,
-		//	$form->input('BookStandRevision.body' ,aa('label',false,'class',"ckeditor"))
 		$bs->ckeditor('BookStandRevision.body' ,aa('label',false,'class','widthMax','rows',Configure::read('BookStand.edit.rows'),'div',aa('class','body')) )
 	);
 ?>
@@ -75,22 +69,25 @@
 		."\n".
 		$form->input('end_publishing' ,aa('label',"公開終了",'dateFormat',"YMD",'timeFormat',"24",'interval',60,'separator'," / ",'minYear',date('Y')-1,'empty',true,'monthNames',false))
 	);
+	// カテゴリ・タグは、動的ページのみ
+	if (empty($this->data['BookStandArticle']['static'])) {
 ?>
 
 	</fieldset>
 	<fieldset>
 		<legend><?php echo h('カテゴリ・タグ');?></legend>
 <?php
-	echo $bs->tab(2,
-		$bs->editNotes('タグについて' ,array(
-			'<strong>タグ</strong>を使ってページを分類することができます。',
-			'複数のタグを設定できます。',
-		),0)
-		."\n".
-		$form->input('BookStandTag' ,aa('label',"タグ" ,'type',"select" ,'multiple',"checkbox"))
-		."\n".
-		$form->input('book_stand_category_id' ,aa('label',"カテゴリ" ,'type',"select"))
-	);
+		echo $bs->tab(2,
+			$bs->editNotes('タグについて' ,array(
+				'<strong>タグ</strong>を使ってページを分類することができます。',
+				'複数のタグを設定できます。',
+			),0)
+			."\n".
+			$form->input('BookStandTag' ,aa('label',"タグ" ,'type',"select" ,'multiple',"checkbox"))
+			."\n".
+			$form->input('book_stand_category_id' ,aa('label',"カテゴリ" ,'type',"select" ,'empty',"カテゴリを選択してください"))
+		);
+	}
 ?>
 
 	</fieldset>

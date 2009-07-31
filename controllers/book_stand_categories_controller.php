@@ -8,8 +8,16 @@ class BookStandCategoriesController extends BookStandAppController {
 		$conditions = array(
 			'BookStandCategory.book_stand_article_count >' => 0,
 		);
-		$this->data = $this->BookStandCategory->find('all' ,compact('conditions'));
-		
+		$contain = array(
+			'BookStandArticle' => array(
+				'conditions' => Set::merge(
+					array('BookStandArticle.static' => 0),
+					$this->BookStandCategory->BookStandArticle->publishConditions()
+				),
+				'fields' => array(),
+			),
+		);
+		$this->data = $this->BookStandCategory->find('all' ,compact('conditions','contain'));
 		return $this->data;
 	}
 	function admin_index() {

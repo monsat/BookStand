@@ -8,7 +8,6 @@ class BookStandRevision extends BookStandAppModel {
 				'rule' => 'notempty',
 			),
 	);
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
 		'BookStandArticle' => array(
 			'className' => 'BookStand.BookStandArticle',
@@ -20,16 +19,4 @@ class BookStandRevision extends BookStandAppModel {
 			'counterScope' => '',
 		),
 	);
-/*
-	var $hasOne = array(
-		'BookStandArticle' => array(
-			'className' => 'BookStand.BookStandArticle',
-			'foreignKey' => 'book_stand_revision_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-*/
 }

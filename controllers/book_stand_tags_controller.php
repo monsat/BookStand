@@ -7,8 +7,16 @@ class BookStandTagsController extends BookStandAppController {
 		$conditions = array(
 			'BookStandTag.book_stand_article_count >' => 0,
 		);
-		$this->data = $this->BookStandTag->find('all' ,compact('conditions'));
-		
+		$contain = array(
+			'BookStandArticle' => array(
+				'conditions' => Set::merge(
+					array('BookStandArticle.static' => 0),
+					$this->BookStandTag->BookStandArticle->publishConditions()
+				),
+				'fields' => array(),
+			),
+		);
+		$this->data = $this->BookStandTag->find('all' ,compact('conditions','contain'));
 		return $this->data;
 	}
 
@@ -64,7 +72,8 @@ class BookStandTagsController extends BookStandAppController {
 		if (empty($this->data)) {
 			$this->data = $this->BookStandTag->read(null, $id);
 		}
-		$bookStandArticles = $this->BookStandTag->BookStandArticle->find('list',array('fields' => array('BookStandArticle.id' ,'BookStandArticle.title' ,'BookStandBook.title'),'recursive' => 0));
+		$conditions = array('BookStandArticle.static' => 0);
+		$bookStandArticles = $this->BookStandTag->BookStandArticle->find('list',compact('conditions'));
 		$this->set(compact('bookStandArticles'));
 	}
 
@@ -78,4 +87,3 @@ class BookStandTagsController extends BookStandAppController {
 	}
 
 }
-?>

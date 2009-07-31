@@ -33,22 +33,16 @@ class BookStandToolComponentForOverride extends Object
 	}
 	
 	// articleUrl
-	function articleUrl($type = 'dynamic' ,$article = array()) {
-		if ($article == array()) $article = $this->Controller->data;
-		$action = 'index';
-		switch ($type) {
-			case 'dynamic':
-			case 'static':
-				if ( empty($this->params['book']) || !($allows = Configure::read('BookStand.url.' . $this->params['book'])) ) {
-					$allows = Configure::read('BookStand.allurl.' . $type);
-				}
-				$action = 'view';
-			break;
+	function articleUrl($article = array()) {
+		if ($article == array()) {
+			$article = $this->Controller->data;
 		}
 		$results = array(
+			'admin' => false,
 			'controller' => 'book_stand_articles',
-			'action' => $action,
+			'action' => 'view',
 		);
+		$allows = Configure::read('BookStand.dynamic_url');
 		foreach ($allows as $allow) {
 			$results[ $allow ] = $article['BookStandArticle'][ $allow ];
 		}
@@ -82,19 +76,22 @@ class BookStandToolComponentForOverride extends Object
 	// URL Default
 	function url($url = array()) {
 		if (is_array($url)) {
-			$defaults = array(
-				'book' => $this->Controller->params['book'],
-				'plugin' => 'book_stand',
-			);
 			// for admin routing
-			if (!empty($this->Controller->params['admin'])) {
-				$defaults = Set::merge($defaults ,array('admin' => true));
+			if (!empty($this->Controller->params['admin']) && (!isset($url['admin']) || $url['admin'] != false)) {
+				$defaults = array(
+					'admin' => true,
+					'plugin' => 'book_stand',
+				);
+			} else {
+				$defaults = array(
+					'book' => empty($this->Controller->params['book']) ? Configure::read('BookStand.dir.dynamics') : $this->Controller->params['book'],
+					'plugin' => 'book_stand',
+				);
 			}
 			$url = Set::merge($defaults ,$url);
 		}
 		return $url;
 	}
-	// 
 	/**
 	 * 初期設定を行ないます。
 	 * このメソッドは$this->startup()よりも先に実行されます。
@@ -109,7 +106,7 @@ class BookStandToolComponentForOverride extends Object
 				'version' => "0.0.1",
 				// main
 				'db_scheme' => "1",
-				'theme' => "book_stand_default_001",		// 'Theme View'を使用しないときは ''
+				'theme' => "book_stand_default_001",			// 'Theme View'を使用しないときは ''
 				'admin_theme' => "book_stand_admin_001",		// 'Theme View'を使用しないときは ''
 				'admin' => 'admin',
 				// Debug Mode
@@ -137,9 +134,10 @@ class BookStandToolComponentForOverride extends Object
 				'owner' => "Owner Name",
 				'owner_profile' => "Owner Profile",
 			),
-			'allurl' => array(
-				'statics' => array('slug' ,'mbslug'),
-				'dynamics' => array('id' ,'mbslug'),
+			'dynamic_url' => array('id' ,'slug'),
+			'dir' => array(
+				'statics' => "info",
+				'dynamics' => "blog"
 			),
 			// Edit
 			'edit' => array(
@@ -166,20 +164,6 @@ class BookStandToolComponentForOverride extends Object
 		);
 		// ユーザー設定の読み込み
 		Configure::write('BookStand' ,Set::merge($default_settings ,Configure::read('BookStand')));
-	}
-	
-	// 内部関数
-	// ログインリダイレクト用
-	function _loginRedirect()
-	{
-		$cont_actions = array('Users.add' ,'Users.register' ,'Users.reissue' ,'Users.login' ,'Users.logout' ,'Users.edit_force' ,'Users.ds_login' ,);
-		if (
-				!in_array($this->Controller->name . '.' . $this->Controller->action ,$cont_actions) &&
-					!(isset($this->Controller->params['prefix']) && $this->Controller->params['prefix'] == 'api')
-		) {
-			$this->Controller->Session->write('Tmp.redirect' ,'/' . $this->Controller->params['url']['url']);
-		}
-		
 	}
 	
 }

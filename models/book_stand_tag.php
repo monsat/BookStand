@@ -18,7 +18,6 @@ class BookStandTag extends BookStandAppModel {
 			),
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $hasAndBelongsToMany = array(
 		'BookStandArticle' => array(
 			'className' => 'BookStand.BookStandArticle',

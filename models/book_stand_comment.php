@@ -26,7 +26,6 @@ class BookStandComment extends BookStandAppModel {
 			),
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
 		'BookStandArticle' => array(
 			'className' => 'BookStand.BookStandArticle',
@@ -37,15 +36,6 @@ class BookStandComment extends BookStandAppModel {
 			'counterCache' => true,
 			'counterScope' => '',
 		),
-		'BookStandCommentStatus' => array(
-			'className' => 'BookStand.BookStandCommentStatus',
-			'foreignKey' => 'book_stand_comment_status_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'counterCache' => true,
-			'counterScope' => '',
-		)
 	);
 
 }

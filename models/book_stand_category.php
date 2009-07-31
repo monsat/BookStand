@@ -13,7 +13,6 @@ class BookStandCategory extends BookStandAppModel {
 	);
 	var $order = array('lft ASC');
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $hasMany = array(
 		'BookStandArticle' => array(
 			'className' => 'BookStand.BookStandArticle',
@@ -26,7 +25,8 @@ class BookStandCategory extends BookStandAppModel {
 			'offset' => '',
 			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'counterQuery' => '',
+			'counterScope' => array(),
 		)
 	);
 	
