@@ -205,7 +205,7 @@ class BsHelper extends AppHelper {
 			if (!is_array($data)) return $matches[0];
 			return $this->link(
 				empty($matches[3]) ? $data['BookStandArticle']['title'] : $matches[3],
-				$this->view->getVar('tool')->articleUrl('dynamic' ,$data)
+				$this->view->getVar('tool')->articleUrl($data)
 			);
 		}
 	// head用

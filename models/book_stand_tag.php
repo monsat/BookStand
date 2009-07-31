@@ -37,4 +37,19 @@ class BookStandTag extends BookStandAppModel {
 		)
 	);
 
+	function setDefault($type = 'common') {
+		switch ($type) {
+			case 'add':
+				
+			break;
+			case 'edit':
+				
+			break;
+			default:
+				$conditions = array('BookStandArticle.static' => 0);
+				$bookStandArticles = $this->BookStandArticle->find('list',compact('conditions'));
+				$this->Controller->set(compact('bookStandArticles'));
+		}
+	}
+	
 }

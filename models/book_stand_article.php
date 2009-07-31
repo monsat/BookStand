@@ -242,6 +242,7 @@ class BookStandArticle extends BookStandAppModel {
 		$data = array();
 		$params = $this->Controller->params;
 		$conditions = array(
+			'BookStandArticle.static' => 0,
 			'BookStandArticle.draft' => 0,
 		);
 		$published = true;

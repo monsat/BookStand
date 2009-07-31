@@ -23,7 +23,7 @@
 		."\n".
 		$form->input('slug' ,aa('label',"Slug",'class',"inputMax"))
 		."\n".
-		$form->input('book_stand_author_id')
+		$form->input('book_stand_author_id' ,aa('label',"制作"))
 		."\n".
 		$form->input('book_stand_revision_id' ,aa('type',"hidden"))
 		."\n".
@@ -52,7 +52,7 @@
 		$note = $bs->editNotes('保存の設定について' ,array(
 			'<strong>編集の履歴とは</strong>過去の編集内容の記録です。編集に手違いがあった場合でも、簡単に差し戻すことができます。',
 			'上書き保存を選択すると、前回の編集内容は失います。',
-			'<strong>下書き保存</strong>をチェックすると、ページは公開されません。公開するときは今すぐ投稿するを選択してください。'
+			'<strong>下書き保存</strong>をチェックすると、ページは公開されません。公開するときは下書き保存のチェックを外し、公開日時を指定してください。'
 		),1);
 	}
 	echo $bs->tab(2,

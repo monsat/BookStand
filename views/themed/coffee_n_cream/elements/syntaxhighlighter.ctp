@@ -20,7 +20,7 @@ echo $javascript->link($scripts . 'shBrushPlain.js') . "\n";
 //	echo $javascript->link($scripts . 'shBrushScala.js') . "\n";
 echo $javascript->link($scripts . 'shBrushSql.js') . "\n";
 //	echo $javascript->link($scripts . 'shBrushVb.js') . "\n";
-//	echo $javascript->link($scripts . 'shBrushXml.js') . "\n";
+echo $javascript->link($scripts . 'shBrushXml.js') . "\n";
 echo $html->css($styles . 'shCore.css') . "\n";
 echo $html->css($styles . 'shThemeDefault.css') . "\n";
 

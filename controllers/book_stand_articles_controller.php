@@ -93,12 +93,15 @@ class BookStandArticlesController extends BookStandAppController {
 		}
 		return $results;
 	}
-	function static_list() {
+	function static_list($removes = array()) {
 		$published = true;
 		$conditions = array(
 			'BookStandArticle.static' => 1,
 			'BookStandArticle.draft' => 0,
 		);
+		if (!empty($removes)) {
+			$conditions['not'] = array('BookStandArticle.id' => $removes);
+		}
 		$articles = $this->BookStandArticle->find('all' ,compact('conditions','published'));
 		return $articles;
 	}

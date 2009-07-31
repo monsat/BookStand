@@ -49,8 +49,7 @@ class BookStandTagsController extends BookStandAppController {
 			$this->data = $this->{$this->modelClass}->read(null, $id);
 			$this->data[ $this->modelClass ][ $this->{$this->modelClass}->primaryKey ] = null;
 		}
-		$bookStandArticles = $this->BookStandTag->BookStandArticle->find('list',array('fields' => array('BookStandArticle.id' ,'BookStandArticle.title' ,'BookStandBook.title'),'recursive' => 0));
-		$this->set(compact('bookStandArticles'));
+		$this->BookStandTag->setDefault();
 		$this->render('admin_edit');
 	}
 
@@ -72,9 +71,7 @@ class BookStandTagsController extends BookStandAppController {
 		if (empty($this->data)) {
 			$this->data = $this->BookStandTag->read(null, $id);
 		}
-		$conditions = array('BookStandArticle.static' => 0);
-		$bookStandArticles = $this->BookStandTag->BookStandArticle->find('list',compact('conditions'));
-		$this->set(compact('bookStandArticles'));
+		$this->BookStandTag->setDefault();
 	}
 
 	function admin_delete($id = null) {
