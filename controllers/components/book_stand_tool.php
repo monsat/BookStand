@@ -123,7 +123,7 @@ class BookStandToolComponentForOverride extends Object
 				'helpers' => false,							// helpersをoverrideするときは、ファイル名を指定する
 			),
 			'cache' => array(
-				'elements' => '1 hour',
+				'elements' => false,
 				'views' => false,
 				'html' => false,
 			),

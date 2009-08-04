@@ -1,7 +1,7 @@
 <h3>カテゴリ別エントリ一覧</h3>
 <ul>
 <?php
-	$categories = $this->requestAction(Router::url($tool->url(array('controller'=>"book_stand_categories",'action'=>"index" ,'admin' => false))));
+	$categories = $this->requestAction(Router::url($tool->url(array('controller'=>"book_stand_categories",'action'=>"index" ,'request' => true ,'admin' => false))));
 	foreach ($categories as $category) :
 		$out = '';
 		$out .= $bs->link(

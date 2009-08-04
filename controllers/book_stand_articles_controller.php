@@ -1,9 +1,6 @@
 <?php
 class BookStandArticlesController extends BookStandAppController {
 	var $name = 'BookStandArticles';
-	var $cacheAction = array(
-		'view/' => 36000//
-	);
 
 	function beforeFilter() {
 		parent::beforeFilter();
@@ -13,6 +10,13 @@ class BookStandArticlesController extends BookStandAppController {
 				array('draft' => 0)
 			);
 	}
+	function beforeRender() {
+		parent::beforeRender();
+		if (empty($this->params['admin']) && Configure::read('BookStand.cache.views') != false) {
+			$this->cacheAction = Configure::read('BookStand.cache.views');
+		}
+	}
+	
 	function index() {
 		if (!empty($this->params['type'])) {
 			$names = func_get_args();

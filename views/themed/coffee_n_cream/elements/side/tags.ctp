@@ -1,7 +1,7 @@
 <h3>タグ別エントリ一覧</h3>
 <ul>
 <?php
-	$tags = $this->requestAction(Router::url($tool->url(array('controller'=>"book_stand_tags",'action'=>"index" ,'admin' => false))));
+	$tags = $this->requestAction(Router::url($tool->url(array('controller'=>"book_stand_tags",'action'=>"index" ,'request' => true ,'admin' => false))));
 	foreach ($tags as $tag) :
 		$out = '';
 		$out .= $bs->link(
