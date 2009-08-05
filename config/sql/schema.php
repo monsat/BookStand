@@ -11,20 +11,10 @@ class BookStandSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $book_stand_article_statuses = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => false),
-		'note' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'point' => array('type' => 'integer', 'null' => false, 'default' => '10', 'length' => 10),
-		'book_stand_article_count' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-	);
 	var $book_stand_articles = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-		'book_stand_book_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'title' => array('type' => 'string', 'null' => false),
 		'slug' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'mbslug' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'posted' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'book_stand_author_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'book_stand_category_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
@@ -32,6 +22,7 @@ class BookStandSchema extends CakeSchema {
 		'book_stand_revision_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'book_stand_revision_count' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'book_stand_tag_count' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
+		'static' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'draft' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
 		'reserved' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'begin_publishing' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
@@ -53,8 +44,6 @@ class BookStandSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => false),
 		'note' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'book_stand_article_count' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-		'deleted' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
-		'deleted_time' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
@@ -85,12 +74,6 @@ class BookStandSchema extends CakeSchema {
 		'deleted_time' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-	);
-	var $book_stand_relations = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-		'book_stand_article_id' => array('type' => 'integer', 'null' => false, 'length' => 10),
-		'book_stand_related_article_id' => array('type' => 'integer', 'null' => false, 'length' => 10),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 	var $book_stand_revisions = array(
