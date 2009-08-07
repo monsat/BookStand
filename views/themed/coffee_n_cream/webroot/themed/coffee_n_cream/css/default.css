@@ -161,7 +161,7 @@ h1,h2,h3 {
 	font-size: 1.1em;
 	margin-bottom: 6px;
 }
-#content li {
+#content ul li {
 	list-style: url(img/li.gif);
 	margin-left: 18px;
 }
