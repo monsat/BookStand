@@ -275,10 +275,10 @@ class BookStandArticle extends BookStandAppModel {
 			case 'date':
 				if (empty($params['day'])) {
 					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) ,1 ,$params['year']));
-					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) + 1 ,0 ,$params['year']));
+					$dates[] = date('Y-m-d' ,mktime(23 ,59 ,59 ,intval($params['month']) + 1 ,0 ,$params['year']));
 				} else {
 					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) ,intval($params['day']) ,$params['year']));
-					$dates[] = date('Y-m-d' ,mktime(0 ,0 ,0 ,intval($params['month']) ,intval($params['day']) ,$params['year']));
+					$dates[] = date('Y-m-d' ,mktime(23 ,59 ,59 ,intval($params['month']) ,intval($params['day']) ,$params['year']));
 				}
 				$conditions['BookStandArticle.posted BETWEEN ? AND ?'] = $dates;
 				return compact('conditions');
