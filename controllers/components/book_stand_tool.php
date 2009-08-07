@@ -136,7 +136,7 @@ class BookStandToolComponentForOverride extends Object
 			'cache' => array(
 				'elements' => false,
 				'views' => false,
-				'html' => false,
+				'html_cache' => false,
 			),
 			// Site Info Settings
 			'info' => array(

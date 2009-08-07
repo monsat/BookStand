@@ -12,8 +12,12 @@ class BookStandArticlesController extends BookStandAppController {
 	}
 	function beforeRender() {
 		parent::beforeRender();
-		if (empty($this->params['admin']) && Configure::read('BookStand.cache.views') != false) {
-			$this->cacheAction = Configure::read('BookStand.cache.views');
+		if (empty($this->params['admin'])) {
+			if (Configure::read('BookStand.cache.html_cache') != false) {
+				$this->helpers[] = 'HtmlCache.HtmlCache';
+			} elseif (Configure::read('BookStand.cache.views') != false) {
+				$this->cacheAction = Configure::read('BookStand.cache.views');
+			}
 		}
 	}
 	
