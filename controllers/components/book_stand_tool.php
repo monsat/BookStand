@@ -167,6 +167,7 @@ class BookStandToolComponentForOverride extends Object
 				// Can not override here
 				'name' => 'BookStand Plugin on CakePHP',
 				'url' => 'http://bookstand.tklabo.net/',
+				'help_url' => 'http://bookstand.tklabo.net/info/help/',
 			),
 			'user_copyright' => array(
 				'name' => 'BookStand Plugin on CakePHP',

@@ -101,7 +101,7 @@ ul, li {
 
 
 #navigation {
-	padding: 5px 20px;
+	padding: 5px 55px;
 	background: #f7f9fd;
 	border-top: 1px solid #d6e0f2;
 	border-bottom: 1px solid #f0f0f0;
@@ -109,9 +109,6 @@ ul, li {
 	text-align: center;
 }
 #navigation ul {
-	margin: 0 auto;
-	padding: 0;
-	text-align: center;
 }
 #navigation li {
 	margin: 0 10px 0 0;
@@ -133,6 +130,7 @@ ul, li {
 	border-right: 1px solid #f0f0f0;
 	border-bottom: 1px solid #f0f0f0;
 }
+#navigation li.last { margin-right: 0; }
 #navigation li a {
 	display: block;
 	padding: 5px 10px;

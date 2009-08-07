@@ -1,12 +1,11 @@
 <div class="title">
-	<div class="floatRight">
+	<div class="floatRight bold">
 <?php
-		$name = 'ゲスト';
-		if ($session->check('BookStand.admin.username')) {
-			$name = $session->read('BookStand.admin.username');
-		}
-		echo $bs->tab(2 ,'<strong>' . $name . '</strong>' . h('さん。こんにちは' . ' - '));
-		echo $bs->tab(2 ,$bs->link('ログアウト' ,array('controller' => 'book_stand_articles' , 'action' => 'admin_logout')));
+		echo $bs->tab(2 ,
+			$bs->link('ブログを開く' ,$tool->url(array('admin' => false ,'controller' => 'book_stand_articles' , 'action' => 'index' ,'top')) ,array('target' => "_blank"))
+			. ' - '
+			. $html->link('ヘルプ' ,Configure::read('BookStand.admin_copyright.help_url'))
+		);
 ?>
 
 	</div>
