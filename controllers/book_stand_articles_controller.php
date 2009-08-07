@@ -68,6 +68,7 @@ class BookStandArticlesController extends BookStandAppController {
 			$this->BookStandTool->redirect('ページが存在しないか、削除された可能性があります。<br />最新の一覧を表示します。', array('action'=>'index' ,'top'));
 		}
 		$this->BookStandTool->canonical( $this->BookStandTool->articleUrl() );
+		$this->pageTitle = $this->data['BookStandArticle']['title'];
 		if (!empty($this->params['static'])) {
 			$this->render('static');
 		}

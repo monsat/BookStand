@@ -28,6 +28,7 @@ class BookStandToolComponentForOverride extends Object
 	
 	function beforeRender() {
 		$this->setCanonical();
+		$this->setTitle();
 		$this->Controller->set('controller' ,$this->Controller);
 		$this->Controller->set('tool' ,$this);
 	}
@@ -50,6 +51,16 @@ class BookStandToolComponentForOverride extends Object
 	}
 	
 	
+	// title
+	function setTitle() {
+		$before = '';
+		$after = '';
+		$after = Configure::read('BookStand.info.title');
+		if (!empty($this->Controller->pageTitle)) {
+			$after = ' | ' . $after;
+		}
+		$this->Controller->pageTitle = $before . $this->Controller->pageTitle . $after;
+	}
 	// canonical
 	function canonical($url) {
 		$this->_canonical = $url;
