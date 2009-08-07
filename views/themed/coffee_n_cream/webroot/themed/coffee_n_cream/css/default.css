@@ -163,6 +163,9 @@ h1,h2,h3 {
 }
 #content ul li {
 	list-style: url(img/li.gif);
+}
+
+#content li {
 	margin-left: 18px;
 }
 
