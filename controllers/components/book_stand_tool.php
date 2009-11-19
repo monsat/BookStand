@@ -154,6 +154,7 @@ class BookStandToolComponentForOverride extends Object
 			'edit' => array(
 				'editor' => true,
 				'config_path' => '',
+				'files_path' => '/files/book_stand/',
 				'rows' => 10,
 				'isRevision' => true,
 				'isTab' => false,

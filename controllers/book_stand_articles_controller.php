@@ -192,6 +192,8 @@ class BookStandArticlesController extends BookStandAppController {
 		$this->{$this->modelClass}->setDefault('edit');
 		$this->{$this->modelClass}->setDefault();
 		
+		// authorized for CKFinder
+		$this->Session->write('Bs.files_path' ,Configure::read('BookStand.edit.files_path'));
 	}
 
 	function admin_delete($id = null) {
