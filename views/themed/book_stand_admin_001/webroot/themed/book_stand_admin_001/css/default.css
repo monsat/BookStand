@@ -104,20 +104,20 @@ ul, li {
 
 #navigation {
 	margin: 10px 0;
-	padding: 5px 55px;
+	padding: 10px 10px;
 	background: #f7f9fd;
-	border-bottom: 1px solid #f0f0f0;
 	border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;
 	font-size: 12px;
 	text-align: center;
 }
 #navigation ul {
+	margin: 0;
 }
 #navigation li {
-	margin: 0 10px 0 0;
+	margin: 0 5px;
 	padding: 0;
 	display: block;
-	width: 118px;
+	width: 98px;
 	float: left;
 	background: #d6e0f2;
 	border-top: 1px solid #f0f0f0;
@@ -133,11 +133,10 @@ ul, li {
 	border-right: 1px solid #f0f0f0;
 	border-bottom: 1px solid #f0f0f0;
 }
-#navigation li.last { margin-right: 0; }
 #navigation li a {
 	display: block;
-	padding: 5px 10px;
-	width: 100px;
+	padding: 5px 4px;
+	width: 90px;
 	text-decoration: none;
 }
 #navigation li a:hover {
@@ -154,33 +153,33 @@ ul, li {
 	overflow: hidden;
 }
 
+#content{
+	padding: 10px;
+	background: #f7f9fd;
+	border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;
+}
+#sidenav {
+}
 
-
+/*
+	negative-margin , if you use side-navigation
 #content{
 	float: right;
 	width: 690px;
 	margin-left: 10px;
 	padding: 4px;
-	background: #f7f9fd;
-	border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;
 }
-
-
-
 #sidenav {
 	float: right;
 	width: 170px;
 	padding: 10px;
-	background: #f7f9fd;
-	color: #333;
 }
-
+*/
 #footer {
 	clear: both;
 	color: #fff;
 	padding: 10px 20px 40px;
 	background: #003d4c;
-	border-top: 1px solid #f0f0f0;
 	border-radius-topleft:8px;-moz-border-radius-topleft:8px;-webkit-border-radius-topleft:8px;
 	border-radius-topright:8px;-moz-border-radius-topright:8px;-webkit-border-radius-topright:8px;
 	font-size: 12px;
