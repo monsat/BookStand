@@ -30,9 +30,9 @@
 body {
 	color: #333;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
-	font-size:90%;
+	font-size:62.5%;
 	margin: 0;
-	background: #f3f3f3;
+	background: #dcdcdc;
 	text-align: center;
 }
 a {
@@ -75,6 +75,7 @@ ul, li {
 	width: 900px;
 	margin-left:auto;
 	margin-right:auto;
+	font-size: 1.5em;
 	text-align: left;
 }
 
@@ -83,7 +84,8 @@ ul, li {
 #header{
 	padding: 10px 20px;
 	background: #003d4c;
-	border-bottom: 1px solid #f0f0f0;
+	border-radius-bottomleft:8px;-moz-border-radius-bottomleft:8px;-webkit-border-radius-bottomleft:8px;
+	border-radius-bottomright:8px;-moz-border-radius-bottomright:8px;-webkit-border-radius-bottomright:8px;
 	color: #fff;
 }
 #header h1 {
@@ -101,10 +103,11 @@ ul, li {
 
 
 #navigation {
+	margin: 10px 0;
 	padding: 5px 55px;
 	background: #f7f9fd;
-	border-top: 1px solid #d6e0f2;
 	border-bottom: 1px solid #f0f0f0;
+	border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;
 	font-size: 12px;
 	text-align: center;
 }
@@ -159,6 +162,7 @@ ul, li {
 	margin-left: 10px;
 	padding: 4px;
 	background: #f7f9fd;
+	border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;
 }
 
 
@@ -171,17 +175,14 @@ ul, li {
 	color: #333;
 }
 
-#content , #sidenav {
-	margin-bottom: -32768px;
-	padding-bottom: 32768px;
-}
-
 #footer {
 	clear: both;
 	color: #fff;
 	padding: 10px 20px 40px;
 	background: #003d4c;
 	border-top: 1px solid #f0f0f0;
+	border-radius-topleft:8px;-moz-border-radius-topleft:8px;-webkit-border-radius-topleft:8px;
+	border-radius-topright:8px;-moz-border-radius-topright:8px;-webkit-border-radius-topright:8px;
 	font-size: 12px;
 	font-weight: bold;
 	text-align: center;
