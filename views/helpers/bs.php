@@ -208,6 +208,21 @@ class BsHelper extends AppHelper {
 				$this->view->getVar('tool')->articleUrl($data)
 			);
 		}
+	
+	function rss_transform($item)
+	{
+		$Item = $item['BookStandArticle'];
+		return array(
+				'title' => $Item['title'],
+				'link' => $this->url( $this->view->getVar('tool')->articleUrl($item) ),
+				'description' => array(
+					'value' => $item['BookStandRevision']['body'],
+					'cdata' => true,
+					'convertEntities' => false,
+				),
+				'pubDate' => $Item['posted'],
+			);
+	}
 	// head用
 	/**
 	 * HEAD用JavaScript読み込みリンクを生成します。
