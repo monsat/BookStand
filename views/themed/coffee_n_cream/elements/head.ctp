@@ -1,3 +1,4 @@
+<meta http-equiv=content-type content="text/html; charset=UTF-8" />
 <title><?php echo $title; ?></title>
 <script type="text/javascript" src="http://www.google.com/jsapi"></script><script>google.load("jquery", "1.3.2");</script>
 <?php
