@@ -4,23 +4,14 @@
 		<legend><?php echo h('コメント');?></legend>
 <?php
 		echo $form->input('id');
-		echo $form->input('title' ,aa('label','タイトル'));
+		echo $form->input('BookStandArticle.title' ,aa('label','記事','disabled','disabled','class',"inputMax"));
+		echo $form->input('title' ,aa('label','タイトル','class',"inputMax"));
 		echo $form->input('author' ,aa('label','ユーザー名'));
-		echo $form->input('author_url' ,aa('label','URL'));
-		echo $form->input('body' ,aa('label','本文'));
-?>
-
-	</fieldset>
-	<fieldset>
-		<legend><?php echo h('投稿データ');?></legend>
-<?php
-		echo $form->input('book_stand_article_id' ,aa('label','ページID'));
-		echo $form->input('user_id' ,aa('label','ユーザーID'));
-		echo $form->input('book_stand_user_id' ,aa('label','BookStand ID'));
-		echo $form->input('author_ip' ,aa('label','IPアドレス'));
+		echo $form->input('author_url' ,aa('label','URL','class',"inputMax"));
+		echo $form->input('body' ,aa('label','本文','class','widthMax','rows',5));
+		echo $form->input('author_ip' ,aa('label','IPアドレス','disabled','disabled'));
 		echo $form->input('posted' ,aa('label','投稿日時'));
 		echo $form->input('spam' ,aa('label','スパム判定'));
-		echo $form->input('book_stand_comment_status_id' ,aa('label','コメントステータス'));
 ?>
 
 	</fieldset>

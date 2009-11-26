@@ -54,7 +54,7 @@ foreach ($this->data as $comment):
 		<td>
 <?php
 	$comment_title = empty($comment['BookStandComment']['title']) ? Configure::read('BookStand.article.comment_untitled') : $comment['BookStandComment']['title'];
-	echo $bs->link($comment_title ,array('action' => "edit" ,$comment['BookStandComment']['id']) ,aa('title',$comment['BookStandComment']['title']."を編集"));
+	echo $bs->link($comment_title ,array('action' => "edit" ,$comment['BookStandComment']['id']) ,aa('title',$comment_title . "を編集"));
 	echo '<br />' . $comment['BookStandComment']['body'];
 ?>
 
