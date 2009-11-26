@@ -42,6 +42,9 @@ class BookStandComment extends BookStandAppModel {
 		if (empty($this->data['BookStandComment']['posted'])) {
 			$this->data['BookStandComment']['posted'] = date('Y-m-d H:i:s');
 		}
+		if (empty($this->data['BookStandComment']['author_ip'])) {
+			$this->data['BookStandComment']['author_ip'] = $this->Controller->RequestHandler->getClientIP();
+		}
 		return true;
 	}
 
