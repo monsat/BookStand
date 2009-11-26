@@ -69,7 +69,6 @@ class BookStandSchema extends CakeSchema {
 		'body' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'posted' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'spam' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
-		'book_stand_comment_status_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'deleted' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'deleted_time' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),

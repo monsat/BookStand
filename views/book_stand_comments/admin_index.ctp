@@ -8,17 +8,11 @@ echo $paginator->counter(array(
 ?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th><?php echo $paginator->sort('ページ名' ,'book_stand_article_id');?></th>
-	<th><?php echo $paginator->sort('タイトル' ,'title');?></th>
-	<th><?php echo $paginator->sort('ユーザー' ,'user_id');?></th>
-	<th><?php echo $paginator->sort('BSユーザー' ,'book_stand_user_id');?></th>
-	<th><?php echo $paginator->sort('氏名' ,'author');?></th>
-	<th><?php echo $paginator->sort('URL' ,'author_url');?></th>
-	<th><?php echo $paginator->sort('IPアドレス' ,'author_ip');?></th>
-	<th><?php echo $paginator->sort('本文' ,'body');?></th>
 	<th><?php echo $paginator->sort('日付' ,'posted');?></th>
-	<th><?php echo $paginator->sort('ス' ,'spam');?></th>
-	<th><?php echo $paginator->sort('状態' ,'book_stand_comment_status_id');?></th>
+	<th><?php echo $paginator->sort('ページ名' ,'book_stand_article_id');?></th>
+	<th><?php echo $paginator->sort('氏名' ,'author');?></th>
+	<th><?php echo $paginator->sort('タイトル / 本文' ,'body');?></th>
+	<th><?php echo $paginator->sort('スパム' ,'spam');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
 <?php
@@ -32,46 +26,46 @@ foreach ($this->data as $comment):
 	<tr<?php echo $class;?>>
 		<td>
 <?php
+	$comment_date = empty($comment['BookStandComment']['posted']) ? $comment['BookStandComment']['created'] : $comment['BookStandComment']['posted'];
+	echo $bs->niceShort(strtotime($comment_date));
+?>
+
+		</td>
+		<td>
+<?php
 	echo $bs->tab(3 ,
-		$bs->link($comment['BookStandComment']['title'] ,array('action' => "edit" ,$comment['BookStandComment']['id']) ,aa('title',$comment['BookStandComment']['title']."を編集"))
+		$bs->link($comment['BookStandArticle']['title'] ,array('controller' => "book_stand_articles" ,'action' => "view" ,$comment['BookStandComment']['book_stand_article_id']) ,aa('title',"記事をプレビュー",'target',"_blank"))
 	);
 ?>
 
 		</td>
 		<td>
-			<?php echo $comment['BookStandComment']['title']; ?>
+<?php
+	$author = empty($comment['BookStandComment']['author']) ? Configure::read('BookStand.article.comment_anonymous') : $comment['BookStandComment']['author'];
+	if (!empty($comment['BookStandComment']['author_url'])) {
+		$author = $html->link($author ,$comment['BookStandComment']['author_url'] ,array('title' => $comment['BookStandComment']['author_url'] . " - " . $comment['BookStandComment']['author_ip'] ,'target' => "_blank"));
+	} else {
+		$author = $html->tag('span' ,$author ,array('title' => $comment['BookStandComment']['author_ip']));
+	}
+	echo $author;
+?>
+
 		</td>
 		<td>
-			<?php echo $comment['BookStandComment']['user_id']; ?>
-		</td>
-		<td>
-			<?php echo $comment['BookStandComment']['book_stand_user_id']; ?>
-		</td>
-		<td>
-			<?php echo $comment['BookStandComment']['author']; ?>
-		</td>
-		<td>
-			<?php echo $comment['BookStandComment']['author_url']; ?>
-		</td>
-		<td>
-			<?php echo $comment['BookStandComment']['author_ip']; ?>
-		</td>
-		<td>
-			<?php echo $comment['BookStandComment']['body']; ?>
-		</td>
-		<td>
-			<?php echo $comment['BookStandComment']['posted']; ?>
+<?php
+	$comment_title = empty($comment['BookStandComment']['title']) ? Configure::read('BookStand.article.comment_untitled') : $comment['BookStandComment']['title'];
+	echo $bs->link($comment_title ,array('action' => "edit" ,$comment['BookStandComment']['id']) ,aa('title',$comment['BookStandComment']['title']."を編集"));
+	echo '<br />' . $comment['BookStandComment']['body'];
+?>
+
 		</td>
 		<td>
 			<?php echo $comment['BookStandComment']['spam']; ?>
 		</td>
-		<td>
-			<?php echo $html->link($comment['BookStandCommentStatus']['name'], array('controller'=> 'book_stand_comment_statuses', 'action'=>'view', $comment['BookStandCommentStatus']['id'])); ?>
-		</td>
 		<td class="actions">
-			<?php echo $html->link(__('View', true), array('action'=>'view', $comment['BookStandComment']['id'])); ?>
-			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $comment['BookStandComment']['id'])); ?>
-			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $comment['BookStandComment']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $comment['BookStandComment']['id'])); ?>
+			<?php echo $html->link(__('View', true), $bs->url(array('action'=>'view', $comment['BookStandComment']['id']))); ?>
+			<?php echo $html->link(__('Edit', true), $bs->url(array('action'=>'edit', $comment['BookStandComment']['id']))); ?>
+			<?php echo $html->link(__('Delete', true), $bs->url(array('action'=>'delete', $comment['BookStandComment']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $comment['BookStandComment']['id']))); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

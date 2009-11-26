@@ -162,6 +162,8 @@ class BookStandToolComponentForOverride extends Object
 			'article' => array(
 				'use_comment' => false,
 				'div_comment' => 'bookStandArticleComment',
+				'comment_anonymous' => "匿名",
+				'comment_untitled' => "無題",
 			),
 			// copyright
 			'admin_copyright' => array(

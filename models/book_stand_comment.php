@@ -37,5 +37,12 @@ class BookStandComment extends BookStandAppModel {
 			'counterScope' => '',
 		),
 	);
+	
+	function beforeSave() {
+		if (empty($this->data['BookStandComment']['posted'])) {
+			$this->data['BookStandComment']['posted'] = date('Y-m-d H:i:s');
+		}
+		return true;
+	}
 
 }
