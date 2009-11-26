@@ -89,8 +89,13 @@ ul, li {
 	color: #fff;
 }
 #header h1 {
-	background: #003d4c url('../img/cake.icon.gif') no-repeat left;
-	padding: 0px 20px;
+	background: #003d4c url('../img/bs_logo_16wn.gif') no-repeat left;
+	padding-left: 28px;
+}
+#header h1:after {
+	padding-right: 28px;
+	content: '';
+	background: url('../img/bs_logo_16wn.gif') no-repeat right ;
 }
 #header a {
 	color: #fff;
