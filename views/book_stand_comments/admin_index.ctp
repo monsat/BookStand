@@ -11,7 +11,7 @@ echo $paginator->counter(array(
 	<th><?php echo $paginator->sort('日付' ,'posted');?></th>
 	<th><?php echo $paginator->sort('ページ名' ,'book_stand_article_id');?></th>
 	<th><?php echo $paginator->sort('氏名' ,'author');?></th>
-	<th><?php echo $paginator->sort('タイトル / 本文' ,'body');?></th>
+	<th><?php echo $paginator->sort('タイトル / 本文' ,'title');?></th>
 	<th><?php echo $paginator->sort('スパム' ,'spam');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
