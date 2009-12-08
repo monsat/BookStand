@@ -50,10 +50,3 @@ foreach ($this->data as $author):
  | 	<?php echo $paginator->numbers();?>
 	<?php echo $paginator->next(__('next', true).' >>', array(), null, array('class'=>'disabled'));?>
 </div>
-<div class="actions">
-	<ul>
-		<li><?php echo $bs->link(__('New BookStandAuthor', true), array('action'=>'add')); ?></li>
-		<li><?php echo $bs->link(__('List Book Stand Articles', true), array('controller'=> 'book_stand_articles', 'action'=>'index')); ?> </li>
-		<li><?php echo $bs->link(__('New Book Stand Article', true), array('controller'=> 'book_stand_articles', 'action'=>'add')); ?> </li>
-	</ul>
-</div>
