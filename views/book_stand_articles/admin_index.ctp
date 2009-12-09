@@ -8,12 +8,12 @@ echo $paginator->counter(array(
 ?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th><?php echo $paginator->sort('種別','static');?></th>
-	<th><?php echo $paginator->sort('投稿','title');?></th>
-	<th><?php echo $paginator->sort('制作者','book_stand_author_id');?></th>
-	<th><?php echo $paginator->sort('カテゴリ','book_stand_category_id');?></th>
-	<th><?php echo $paginator->sort($html->image("fam/comments.png" ,aa('alt',"コメント",'title','コメント')) ,'book_stand_comment_count' ,aa('escape',false));?></th>
-	<th><?php echo $paginator->sort($html->image("fam/tag_red.png" ,aa('alt',"タグ",'title','タグ')) ,'book_stand_tag_count' ,aa('escape',false));?></th>
+	<th><?php echo $bs->pageSort('種別','static');?></th>
+	<th><?php echo $bs->pageSort('投稿','title');?></th>
+	<th><?php echo $bs->pageSort('制作者','book_stand_author_id');?></th>
+	<th><?php echo $bs->pageSort('カテゴリ','book_stand_category_id');?></th>
+	<th><?php echo $bs->pageSort($html->image("fam/comments.png" ,aa('alt',"コメント",'title','コメント')) ,'book_stand_comment_count' ,aa('escape',false));?></th>
+	<th><?php echo $bs->pageSort($html->image("fam/tag_red.png" ,aa('alt',"タグ",'title','タグ')) ,'book_stand_tag_count' ,aa('escape',false));?></th>
 	<th><?php echo h('日付');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>

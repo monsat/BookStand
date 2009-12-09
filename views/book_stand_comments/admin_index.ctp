@@ -8,11 +8,11 @@ echo $paginator->counter(array(
 ?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th><?php echo $paginator->sort('日付' ,'posted');?></th>
-	<th><?php echo $paginator->sort('ページ名' ,'book_stand_article_id');?></th>
-	<th><?php echo $paginator->sort('氏名' ,'author');?></th>
-	<th><?php echo $paginator->sort('タイトル / 本文' ,'title');?></th>
-	<th><?php echo $paginator->sort('スパム' ,'spam');?></th>
+	<th><?php echo $bs->pageSort('日付' ,'posted');?></th>
+	<th><?php echo $bs->pageSort('ページ名' ,'book_stand_article_id');?></th>
+	<th><?php echo $bs->pageSort('氏名' ,'author');?></th>
+	<th><?php echo $bs->pageSort('タイトル / 本文' ,'title');?></th>
+	<th><?php echo $bs->pageSort('スパム' ,'spam');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
 <?php

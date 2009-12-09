@@ -8,9 +8,9 @@ echo $paginator->counter(array(
 ?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th><?php echo $paginator->sort("氏名" ,'name');?></th>
-	<th><?php echo $paginator->sort("備考" ,'note');?></th>
-	<th><?php echo $paginator->sort("総ページ数" ,'book_stand_article_count');?></th>
+	<th><?php echo $bs->pageSort("氏名" ,'name');?></th>
+	<th><?php echo $bs->pageSort("備考" ,'note');?></th>
+	<th><?php echo $bs->pageSort("総ページ数" ,'book_stand_article_count');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
 <?php
