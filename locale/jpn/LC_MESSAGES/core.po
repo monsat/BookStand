@@ -1717,6 +1717,10 @@ msgstr "%s を削除"
 msgid "Related %s"
 msgstr "%s に関連"
 
+# all paginators
 msgid "Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%"
 msgstr "%pages%/%page%ページ %start% - %end%件を表示（全%count%件）"
 
+# all admin_index.ctp
+msgid "Are you sure you want to delete # %s?"
+msgstr "削除してもよろしいですか？（ID: %s ）"
