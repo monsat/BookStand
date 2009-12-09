@@ -21,13 +21,3 @@
 
 	</fieldset>
 </div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('Delete', true), array('action'=>'delete', $form->value('BookStandComment.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $form->value('BookStandComment.id'))); ?></li>
-		<li><?php echo $html->link(__('List BookStandComments', true), array('action'=>'index'));?></li>
-		<li><?php echo $html->link(__('List Book Stand Articles', true), array('controller'=> 'book_stand_articles', 'action'=>'index')); ?> </li>
-		<li><?php echo $html->link(__('New Book Stand Article', true), array('controller'=> 'book_stand_articles', 'action'=>'add')); ?> </li>
-		<li><?php echo $html->link(__('List Book Stand Comment Statuses', true), array('controller'=> 'book_stand_comment_statuses', 'action'=>'index')); ?> </li>
-		<li><?php echo $html->link(__('New Book Stand Comment Status', true), array('controller'=> 'book_stand_comment_statuses', 'action'=>'add')); ?> </li>
-	</ul>
-</div>
