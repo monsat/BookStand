@@ -32,8 +32,8 @@ foreach ($this->data as $tag):
 			<?php echo $tag['BookStandTag']['book_stand_article_count']; ?>
 		</td>
 		<td class="actions">
-			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $tag['BookStandTag']['id'])); ?>
-			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $tag['BookStandTag']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tag['BookStandTag']['id'])); ?>
+			<?php echo $bs->link(__('Edit', true), array('action'=>'edit', $tag['BookStandTag']['id'])); ?>
+			<?php echo $bs->link(__('Delete', true), array('action'=>'delete', $tag['BookStandTag']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $tag['BookStandTag']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
