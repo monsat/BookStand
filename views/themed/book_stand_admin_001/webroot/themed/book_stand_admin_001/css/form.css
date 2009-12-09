@@ -181,6 +181,7 @@ form div.submit {
 
 form div.submit input.default {
 	padding: 1em 2em;
+	border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;
 	background-color: #ffffe0;
 	font-weight: bold;
 	cursor: pointer;
