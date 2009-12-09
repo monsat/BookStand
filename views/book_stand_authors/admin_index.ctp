@@ -37,7 +37,6 @@ foreach ($this->data as $author):
 			<?php echo $author['BookStandAuthor']['book_stand_article_count']; ?>
 		</td>
 		<td class="actions">
-			<?php echo $bs->link(__('View', true), array('action'=>'view', $author['BookStandAuthor']['id'])); ?>
 			<?php echo $bs->link(__('Edit', true), array('action'=>'edit', $author['BookStandAuthor']['id'])); ?>
 			<?php echo $bs->link(__('Delete', true), array('action'=>'delete', $author['BookStandAuthor']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $author['BookStandAuthor']['id'])); ?>
 		</td>

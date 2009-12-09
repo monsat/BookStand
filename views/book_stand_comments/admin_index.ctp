@@ -63,7 +63,6 @@ foreach ($this->data as $comment):
 			<?php echo $comment['BookStandComment']['spam']; ?>
 		</td>
 		<td class="actions">
-			<?php echo $html->link(__('View', true), $bs->url(array('action'=>'view', $comment['BookStandComment']['id']))); ?>
 			<?php echo $html->link(__('Edit', true), $bs->url(array('action'=>'edit', $comment['BookStandComment']['id']))); ?>
 			<?php echo $html->link(__('Delete', true), $bs->url(array('action'=>'delete', $comment['BookStandComment']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $comment['BookStandComment']['id']))); ?>
 		</td>
