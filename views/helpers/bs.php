@@ -8,7 +8,7 @@ class BsHelper extends AppHelper {
 	 * 当ヘルパーで使用するヘルパー
 	 * @var array
 	 */
-	var $helpers = array('Html' ,'Form' ,'Time' ,'Session' ,'Javascript');
+	var $helpers = array('Html' ,'Form' ,'Time' ,'Session' ,'Javascript' ,'Paginator');
 	/**
 	 * View参照用
 	 * @var object
@@ -326,6 +326,21 @@ class BsHelper extends AppHelper {
 		if (empty($this->view->data['BookStandArticle']['id'])) return '';
 		$out = $this->link('履歴一覧' ,$this->url(array('controller'=>"book_stand_articles" ,'action'=>"revisions",$this->view->data['BookStandArticle']['id'])) ,aa('class',"revision"));
 		return sprintf($wrap ,$out);
+	}
+	
+	/**
+	 * Paginator Sort URLをbook_stand用URLへ加工し生成
+	 *
+	 * @param string $title
+	 * @param string $key
+	 * @param array $options
+	 * @return string
+	 */
+	function pageSort($title ,$key = null ,$options = array()) {
+		if (empty($options) || empty($options['url'])) {
+			$options = Set::merge($options ,aa('url' ,$this->url()));
+		}
+		return $this->Paginator->sort($title ,$key ,$options);
 	}
 	
 	/**
