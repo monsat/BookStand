@@ -176,9 +176,6 @@ class BookStandAppController extends AppController {
 	}
 
 	function admin_edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->flash(__('Invalid BookStandBook', true), array('action'=>'index'));
-		}
 		if (!empty($this->data)) {
 			$this->{$this->modelClass}->set($this->data);
 			if ($this->{$this->modelClass}->save()) {
@@ -190,14 +187,25 @@ class BookStandAppController extends AppController {
 			} else {
 				$this->Session->setFlash('修正が必要な項目があります。');
 			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->{$this->modelClass}->read(null, $id);
+		} elseif (!empty($id) && ($this->data = $this->{$this->modelClass}->read(null, $id))) {
 			// default
 			$this->{$this->modelClass}->setDefault('edit');
+		} else {
+			$this->BookStandTool->redirect('修正対象が見つかりませんでした。' ,array('action'=>'index'));
+			return;
 		}
 		// default
 		$this->{$this->modelClass}->setDefault();
+	}
+	
+	function admin_delete($id = null) {
+		if (!empty($id) && $this->{$this->modelClass}->delete($id)) {
+			$message = '削除が完了しました。';
+		} else {
+			$message = '削除対象が見つかりませんでした。';
+		}
+		$this->BookStandTool->redirect($message ,array('action'=>'index'));
+		return;
 	}
 	
 	function blackHoleCallback($error) {
