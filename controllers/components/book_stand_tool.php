@@ -103,6 +103,21 @@ class BookStandToolComponentForOverride extends Object
 		}
 		return $url;
 	}
+	
+	/**
+	 * 文字コード一括変換
+	 *
+	 * @param mixed $data
+	 * @return mixed
+	 */
+	function convertEncording($data) {
+		if (is_array($data)) {
+			$result = array_map(array($this ,'convertEncording') ,$data);
+		} else {
+			$result = mb_convert_encoding($data ,mb_internal_encoding() ,'auto');
+		}
+		return $result;
+	}
 	/**
 	 * 初期設定を行ないます。
 	 * このメソッドは$this->startup()よりも先に実行されます。
