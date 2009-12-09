@@ -57,6 +57,11 @@
 	
 	// 動的ページ
 	$bs_book = Configure::read('BookStand.dir.dynamics') != false ? Configure::read('BookStand.dir.dynamics') : 'blog';
+	// /blog/trackback.xml
+	Router::connect("/:book/tb/*", array(
+			'plugin' => 'book_stand', 'controller' => 'book_stand_comments', 'action' => 'trackback',
+		),array('book' => $bs_book)
+	);
 	// comment
 	Router::connect("/:book/comments/:action/*", array(
 			'controller' => 'book_stand_comments', 'plugin' => 'book_stand',
@@ -70,11 +75,6 @@
 	// /blog/index.rss
 	Router::connect("/:book/index", array(
 			'plugin' => 'book_stand', 'controller' => 'book_stand_articles', 'action' => 'index', 'top',
-		),array('book' => $bs_book)
-	);
-	// /blog/trackback.xml
-	Router::connect("/:book/tb/*", array(
-			'plugin' => 'book_stand', 'controller' => 'book_stand_comments', 'action' => 'trackback',
 		),array('book' => $bs_book)
 	);
 	// /blog/2009/12/31/encoded-title >>> URLに日付とブログタイトルを含める形式のURLによる記事表示
