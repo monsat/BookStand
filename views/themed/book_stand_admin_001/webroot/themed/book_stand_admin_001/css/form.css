@@ -50,42 +50,43 @@ form div {
 	zoom: 1;
 	margin: 5px 0 0 0;
 	padding: 1px 3px;
-	width: 504px;
+	width: 667px;
 }
 form div.body {
 	width: 100%;
 }
 form .inputMax {
-	width: 360px;
+	width: 523px;
 }
 
 form fieldset div.notes {
 	float: right;
-	width: 150px;
+	width: 180px;
 	height: auto;
 	margin: 0 0 10px 5px;
 	padding: 5px;
 	border: 1px solid #666666;
 	background-color: #ffffe1;
 	color: #666666;
-	font-size: 95%;
+	font-size: 12px;
 }
 
 form fieldset div.notes h4 {
-	background-image: url(../img/fam/information.png);
-	background-repeat: no-repeat;
-	background-position: top left;
+	margin: 0 0 5px;
 	padding: 3px 0 3px 20px;
 	border-width: 0 0 1px 0;
 	border-style: solid;
 	border-color: #666666;
+	background-image: url(../img/fam/information.png);
+	background-repeat: no-repeat;
+	background-position: top left;
 	color: #666666;
 	font-size: 100%;
 	font-weight: bold;
 }
 
 form fieldset div.notes div {
-	width: 140px;
+	width: 170px;
 }
 
 form fieldset div.notes p {
@@ -103,7 +104,7 @@ form div.radio fieldset , form div.select fieldset {
 	border: 1px solid #999;
 	margin: 0 0 0 140px;
 	padding: 0 5px 5px 5px;
-	width: 346px;
+	width: 509px;
 }
 form div.select fieldset {
 	padding: 5px;
@@ -112,13 +113,13 @@ form div.select div.checkbox {
 	clear: none;
 	margin: 0 0 0 140px;
 	padding: 0 5px 5px 5px;
-	width: 346px;
+	width: 509px;
 }
 form div.input.checkbox {
 	clear: none;
 	margin: 5px 0 0 140px;
 	padding: 0 5px 5px 5px;
-	width: 346px;
+	width: 509px;
 }
 form div.select fieldset div.checkbox {
 	margin: 0;
@@ -175,7 +176,7 @@ form div input.inputFile {
 }
 
 form div.submit {
-	width: 354px;
+	width: 517px;
 	padding: 0 0 0 146px;
 }
 
