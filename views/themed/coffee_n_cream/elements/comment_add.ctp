@@ -17,3 +17,10 @@
 ?>
 
 </fieldset>
+<fieldset>
+	<legend><?php echo h('トラックバック');?></legend>
+<?php
+	echo $form->input('tb' ,aa('label',"Trackback URL",'value',Router::url($bs->url(array('controller'=>"book_stand_comments",'action'=>"trackback",$this->data['BookStandArticle']['id'])) ,true),'name',"trackback_url"));
+?>
+
+</fieldset>
