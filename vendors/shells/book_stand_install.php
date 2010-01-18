@@ -2,20 +2,26 @@
 
 class BookStandInstallShell extends Shell {
 	
+	var $version = 'beta - 0.5';
 	var $output_encode = 'utf-8';
 	var $plugin_dir;
+	var $config_dir;
+	var $app_config_dir;
 	var $webroot_themed_dir;
 	var $config_file_name = 'book_stand_config.php';
+	var $routes_file_name = 'book_stand_routes.php';
 	
 	function startup() {
 		parent::startup();
 		
 		// prepare
 		$this->plugin_dir = dirname(dirname(dirname(__FILE__)));
+		$this->config_dir = $this->plugin_dir . DS . 'config';
+		$this->app_config_dir = $this->params['working'] . DS . 'config';
 		$this->webroot_themed_dir = 'webroot' . DS . 'themed';
 		
 		// Welcome Message
-		$this->out('BookStand Plugin Installer (Upgrader)');
+		$this->out("BookStand Plugin Installer (Upgrader) {$this->version}");
 		$this->out($this->plugin_dir);
 		$this->hr();
 		//	debug($this->params ,false ,false);
@@ -35,8 +41,12 @@ class BookStandInstallShell extends Shell {
 	function main() {
 		// データベース
 		$this->_database();
+		// Store
+		$this->_store();
 		// 設定ファイル
 		$this->_configFiles();
+		// Routes
+		$this->_routes();
 		// シンボリックリンク
 		$this->_makeSymLinks();
 	}
@@ -45,29 +55,71 @@ class BookStandInstallShell extends Shell {
 		//debug($this->DbConfig ,false ,false);
 	}
 	
+	function _store() {
+		$this->hr();
+		$this->mbout('Store Directory' ,'Article 保存ディレクトリをコピーします');
+		$this->mbout('Checking exist file' ,'ディレクトリの有無を確認します');
+		
+		$default_store_dir = $this->plugin_dir . DS . 'store.default';
+		$app_store_dir = $this->params['working'] . DS . 'store';
+		if (file_exists($app_store_dir)) {
+			$this->mbout("exists: {$app_store_dir}");
+		} else {
+			$method = "cp -pR {$default_store_dir} {$app_store_dir}";
+			$this->mbout("Copy" ,"コピーします。");
+			$this->mbout("> $method");
+			if (system($method) !== FALSE) {
+				$this->mbout("copied: {$app_store_dir}");
+			} else {
+				$this->done("failure: {$app_store_dir}" , "コピーできませんでした( {$app_store_dir} )");
+			}
+		}
+	}
+	
 	function _configFiles() {
-		
-		
 		$this->hr();
 		$this->mbout('Config Files' ,'設定ファイルをコピーします');
 		$this->mbout('Checking exist file' ,'設定ファイルの有無を確認します');
 		
-		$config_dir = $this->plugin_dir . DS . 'config';
-		$config_file = $this->config_file_name;
-		$target_dir = $this->params['working'] . DS . 'config';
-		if (file_exists($target_dir . DS . $config_file)) {
-			$this->mbout("exists: {$config_file}");
+		$filename = $this->config_file_name;
+		$app_config_file = $this->app_config_dir . DS . $filename;
+		if (file_exists($app_config_file)) {
+			$this->mbout("exists: {$filename}");
 		} else {
-			if (copy($config_dir . DS . $config_file , $target_dir . DS . $config_file)) {
-				$this->mbout("copied: {$config_file}");
-				$this->mbout('write this in bootstrap.php , and edit ' . $config_file ,"bootstrap.php に以下を記述し、{$config_file}の内容を編集してください");
-				$this->mbout("\n# " . $target_dir . DS . 'bootstrap.php');
+			if (copy($this->config_dir . DS . $filename , $app_config_file)) {
+				$this->mbout("copied: {$filename}");
+				$this->mbout('write this in bootstrap.php , and edit ' . $filename ,"bootstrap.php に以下を記述し、{$filename}の内容を編集してください");
+				$this->mbout("\n# " . $this->app_config_dir . DS . 'bootstrap.php');
 				$this->mbout("Configure::load('book_stand_config');\n");
 				// 継続確認
 				$result = $this->in('Continue ?' ,array('Continue' ,'Exit') ,'Continue');
 				if ($result == 'Exit') $this->done();
 			} else {
-				$this->done("failure: {$config_file}" , "コピーできませんでした( {$config_file} )");
+				$this->done("failure: {$filename}" , "コピーできませんでした( {$filename} )");
+			}
+		}
+	}
+	
+	function _routes() {
+		$this->hr();
+		$this->mbout('routes.php' ,'URLルーティングファイルをコピーします');
+		$this->mbout('Checking exist file' ,'ファイルの有無を確認します');
+		
+		$filename = $this->routes_file_name;
+		$app_routes_file = $this->app_config_dir . DS . $filename;
+		if (file_exists($app_routes_file)) {
+			$this->mbout("exists: {$filename}");
+		} else {
+			if (copy($this->config_dir . DS . $filename , $app_routes_file)) {
+				$this->mbout("copied: {$filename}");
+				$this->mbout('write this in routes.php , and edit ' . $filename ,"routes.php に以下を記述し、{$filename}の内容を編集してください");
+				$this->mbout("\n# " . $this->app_config_dir . DS . 'routes.php');
+				$this->mbout("include('{$app_routes_file }');\n");
+				// 継続確認
+				$result = $this->in('Continue ?' ,array('Continue' ,'Exit') ,'Continue');
+				if ($result == 'Exit') $this->done();
+			} else {
+				$this->done("failure: {$filename}" , "コピーできませんでした( {$filename} )");
 			}
 		}
 	}
