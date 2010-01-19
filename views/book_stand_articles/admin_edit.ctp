@@ -24,8 +24,6 @@
 		$form->input('slug' ,aa('label',"Slug",'class',"inputMax"))
 		."\n".
 		$form->input('book_stand_author_id' ,aa('label',"制作"))
-		."\n".
-		$form->input('book_stand_revision_id' ,aa('type',"hidden"))
 	);
 ?>
 
@@ -34,7 +32,7 @@
 		<legend><?php echo h('本文');?></legend>
 <?php
 	echo $bs->tab(2,
-		$bs->ckeditor('BookStandRevision.body' ,aa('label',false,'class','widthMax','rows',Configure::read('BookStand.edit.rows'),'div',aa('class','body')) )
+		$bs->ckeditor('BookStandArticle.revision' ,aa('label',false,'class','widthMax','rows',Configure::read('BookStand.edit.rows'),'div',aa('class','body')) )
 	);
 ?>
 
@@ -57,7 +55,7 @@
 		$note
 		."\n".
 		(empty($bookStandRevisionOptions) ? '' :
-			$form->input('is_revision' ,aa('type',"radio",'legend',"編集の履歴",'label',true,'options',$bookStandRevisionOptions,'default',(Configure::read('BookStand.edit.isRevision') == true ? 'create' : update) ) ) . "\n"
+			$form->input('is_revision' ,aa('type',"radio",'legend',"編集の履歴",'label',true,'options',$bookStandRevisionOptions,'default',(Configure::read('BookStand.edit.isRevision') == true ? 'create' : 'update') ) ) . "\n"
 		) .
 		$form->input('posted' ,aa('label',"表示する投稿日時",'dateFormat',"YMD",'timeFormat',"24",'interval',10,'separator'," / ",'minYear',date('Y')-5,'maxYear',date('Y')+5,'monthNames',false))
 		."\n".

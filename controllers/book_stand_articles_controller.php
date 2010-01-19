@@ -149,14 +149,15 @@ class BookStandArticlesController extends BookStandAppController {
 			}
 		} elseif (!empty($id)) {
 			$this->data = $this->BookStandArticle->read(null, $id);
-			$this->data[ $this->modelClass ][ $this->{$this->modelClass}->primaryKey ] = null;
+			$this->data['BookStandArticle'][ $this->{$this->modelClass}->primaryKey ] = null;
+			$this->data['BookStandArticle']['revision'] = $this->BookStandArticle->readRevision($id);
 		}
 		// default
 		$this->{$this->modelClass}->setDefault();
 		$this->render('admin_edit');
 	}
 
-	function admin_edit($id = null ,$revision_id = null) {
+	function admin_edit($id = null ,$revision_hash = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('記事が見つかりませんでした。');
 			$this->BookStandTool->redirect(array('action'=>'index'));
@@ -175,7 +176,7 @@ class BookStandArticlesController extends BookStandAppController {
 			}
 		} else {
 			$this->data = $this->BookStandArticle->read(null, $id);
-			if ($revision_id) {
+			if ($revision_hash) {
 				// 履歴を遡って編集
 				$this->data['BookStandRevision'] = null;
 				foreach ($this->data['BookStandRevisionHistory'] as $history) {
@@ -184,7 +185,7 @@ class BookStandArticlesController extends BookStandAppController {
 				$this->data['BookStandRevision']['body'] = $history['body'];
 				$this->data['BookStandArticle']['is_revision'] = 'create';
 			} else {
-				$this->data['BookStandRevision']['copied_body'] = $this->data['BookStandRevision']['body'];
+				$this->data['BookStandArticle']['revision'] = $this->BookStandArticle->readRevision($id);
 			}
 		}
 		// default

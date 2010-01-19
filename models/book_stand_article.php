@@ -46,6 +46,7 @@ class BookStandArticle extends BookStandAppModel {
 		'update' => '前回の履歴に上書き保存',
 		'create' => '履歴を残して保存',
 	);
+	var $_revision = null;
 	
 	var $belongsTo = array(
 		'BookStandAuthor' => array(
@@ -66,13 +67,6 @@ class BookStandArticle extends BookStandAppModel {
 			'counterCache' => true,
 			'counterScope' => '',
 		),
-		'BookStandRevision' => array(
-			'className' => 'BookStand.BookStandRevision',
-			'foreignKey' => 'book_stand_revision_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
 	);
 
 	var $hasOne = array(
@@ -92,14 +86,6 @@ class BookStandArticle extends BookStandAppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'BookStandRevisionHistory' => array(
-			'className' => 'BookStand.BookStandRevision',
-			'foreignKey' => 'book_stand_article_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => 'BookStandRevisionHistory.modified DESC'
-		)
 	);
 
 	var $hasAndBelongsToMany = array(
@@ -121,22 +107,28 @@ class BookStandArticle extends BookStandAppModel {
 		),
 	);
 	
+	function afterFind($results ,$primary) {
+/*	if ($primary) {
+			foreach ($results as $key => &$result) {
+				if (!empty($result['BookStandArticle'])) {
+					$result['BookStandArticle']['revision'] = $this->readRevision($result['BookStandArticle']['id']);
+				}
+			}
+		}*/
+		return $results;
+	}
 	function beforeSave() {
 		// for search
-		if (!empty($this->data['BookStandRevision'])) {
-			// 本文のサマリーを作成
-			$this->data['BookStandArticle']['body'] = strip_tags( $this->data['BookStandRevision']['body'] );
-		}
+		// 本文のサマリーを作成
+		$this->_revision = $this->data['BookStandArticle'];
+		$this->data['BookStandArticle']['body'] = strip_tags( $this->data['BookStandArticle']['revision'] );
 		return true;
 	}
 	function afterSave($created) {
-		// id を BookStandRevision book_stand_article_id に
-		if (empty($this->data['BookStandRevision']['id'])) {
-			$this->BookStandRevision->saveField('book_stand_article_id' ,$this->id);
-		}
-		
+		// 記事ファイルの保存
+		$this->saveRevision();
+		$this->_revision = null;
 	}
-	
 	// HABTM用条件追加
 	function habtmCounterScope($field) {
 		if ($field != 'book_stand_article_count') return array();
@@ -145,22 +137,42 @@ class BookStandArticle extends BookStandAppModel {
 		$conditions = array('draft' => 0);
 		return array('book_stand_article_id' => array_values($this->find('list' ,compact('fields','published','conditions'))));
 	}
+	// 記事ファイルの読み込み
+	function readRevision($id ,$is_all_revisions = false) {
+		// values
+		$heads_dir = $this->headsPath($id);
+		if ($is_all_revisions) {
+		// 単一記事の全履歴取得
+			$result = array();
+			$revisions_dir = $this->revisionsPath($id);
+			$folder = new Folder($revisions_dir);
+			$revisions = $folder->find('[0-9]+\.html\.php');
+			foreach ($revisions as $revision) {
+				$result[] = file_get_contents($head_dir . DS . $revision);
+			}
+			return $results;
+		} else {
+			$heads_file = $heads_dir . DS . "{$id}.html.php";
+			return file_get_contents($heads_file);
+		}
+	}
 	// 記事ファイルの保存
 	function saveRevision() {
 		// values
-		$article = $this->data['BookStandArticle'];
-		$heads_dir = $this->headsPath($article['id']);
-		$heads_file = $head_dir . DS . "{$article['id']}.html.php";
+		$id = $this->id;
+		$article = $this->_revision;
+		$heads_dir = $this->headsPath($id);
+		$heads_file = $heads_dir . DS . "{$id}.html.php";
 		// 保存前の履歴をコピーする
 		$is_copy_revision = empty($article['is_revision']) || $article['is_revision'] == 'create';
 		if ($is_copy_revision && file_exists($heads_file)) {
-			$revisions_dir = $this->revisionsPath($article['id']);
+			$revisions_dir = $this->revisionsPath($id);
 			$revisions_file = $revisions_dir . DS . md5_file($heads_file) . ".html.php";
 			copy($heads_file ,$revisions_file);
 		}
 		// 保存
 		if ($file = new File($heads_file ,true)) {
-			$body = $file->prepare($article['body']);
+			$body = $file->prepare($article['revision']);
 			$file->write($body);
 			return true;
 		} else {
