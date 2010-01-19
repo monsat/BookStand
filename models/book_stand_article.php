@@ -145,6 +145,48 @@ class BookStandArticle extends BookStandAppModel {
 		$conditions = array('draft' => 0);
 		return array('book_stand_article_id' => array_values($this->find('list' ,compact('fields','published','conditions'))));
 	}
+	// 記事ファイルの保存
+	function saveRevision() {
+		// values
+		$article = $this->data['BookStandArticle'];
+		$heads_dir = $this->headsPath($article['id']);
+		$heads_file = $head_dir . DS . "{$article['id']}.html.php";
+		// 保存前の履歴をコピーする
+		$is_copy_revision = empty($article['is_revision']) || $article['is_revision'] == 'create';
+		if ($is_copy_revision && file_exists($heads_file)) {
+			$revisions_dir = $this->revisionsPath($article['id']);
+			$revisions_file = $revisions_dir . DS . md5_file($heads_file) . ".html.php";
+			copy($heads_file ,$revisions_file);
+		}
+		// 保存
+		if ($file = new File($heads_file ,true)) {
+			$body = $file->prepare($article['body']);
+			$file->write($body);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * Storeディレクトリのパスを返す
+	 * @param int $id 記事ID
+	 * @return string ディレクトリのパス
+	 */
+	function headsPath($id) {
+		return APP . Configure::read("BookStand.edit.store_path") . DS . 'heads';
+	}
+	/**
+	 * Storeディレクトリのパスを返す
+	 * @param int $id 記事ID
+	 * @return string ディレクトリのパス
+	 */
+	function revisionsPath($id) {
+		$path = APP . Configure::read("BookStand.edit.store_path") . DS . 'revisions' . DS . $id;
+		if (!file_exists($path)) {
+			mkdir($path);
+		}
+		return $path;
+	}
 	
 	function resetRevisionIdIfCreate() {
 		if ($this->data['BookStandArticle']['is_revision'] == 'create') {
