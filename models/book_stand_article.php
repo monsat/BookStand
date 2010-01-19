@@ -187,20 +187,6 @@ class BookStandArticle extends BookStandAppModel {
 		}
 		return $path;
 	}
-	
-	function resetRevisionIdIfCreate() {
-		if ($this->data['BookStandArticle']['is_revision'] == 'create') {
-			$body = str_replace("\t",'',$this->data['BookStandRevision']['body']);
-			$copied_body = str_replace("\t",'',$this->data['BookStandRevision']['copied_body']);
-			if ($body === $copied_body) {
-				// 本文の更新がされていなければ履歴を更新しない
-				unset( $this->data['BookStandRevision'] );
-			} else {
-				// 本文更新
-				$this->data['BookStandRevision']['id'] = null;
-			}
-		}
-	}
 	/**
 	 * 投稿ステータスを自動生成
 	 * attribute behavior

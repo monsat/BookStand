@@ -164,7 +164,6 @@ class BookStandArticlesController extends BookStandAppController {
 		if (!empty($this->data)) {
 			$this->BookStandArticle->set($this->data);
 			// Revision Update
-			$this->BookStandArticle->resetRevisionIdIfCreate();
 			if ($this->BookStandArticle->saveAll(null ,array('validate' => 'first'))) {
 				$this->BookStandTool->redirect(
 					'正常に投稿されました。',

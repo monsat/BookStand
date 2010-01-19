@@ -26,8 +26,6 @@
 		$form->input('book_stand_author_id' ,aa('label',"制作"))
 		."\n".
 		$form->input('book_stand_revision_id' ,aa('type',"hidden"))
-		."\n".
-		$form->input('BookStandRevision.copied_body' ,aa('type',"hidden"))
 	);
 ?>
 
