@@ -14,7 +14,7 @@
 
 	</div>
 	<div class="bookStandArticleMain">
-		<?php echo $bs->tab(2 ,$bs->bsTags( $bs->readMore($article['BookStandRevision']['body'] ,$tool->articleUrl($article)) )); ?>
+<?php echo $bs->readMore($Article['id'] ,$tool->articleUrl($article)); ?>
 
 	</div>
 <?php endforeach; ?>

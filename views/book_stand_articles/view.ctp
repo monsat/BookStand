@@ -8,7 +8,7 @@
 
 	</div>
 	<div class="bookStandArticleMain">
-		<?php echo $bs->tab(2 ,$bs->bsTags( $this->data['BookStandRevision']['body']) ); ?>
+<?php echo $bs->includeArticle($this->data['BookStandArticle']['id']); ?>
 
 	</div>
 	<?php echo $bs->tab(1 ,$this->element('comment_box')) ?>

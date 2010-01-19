@@ -150,6 +150,21 @@ class BsHelper extends AppHelper {
 		return empty($url) ? '' : "<link rel=\"canonical\" href=\"{$url}\" />";
 	}
 	// Article用
+	
+	function includeArticle($id = null) {
+		$path = APP . Configure::read("BookStand.edit.store_path") . DS . 'heads' . DS . intval($id) . ".html.php";
+		if (!is_null($id) && file_exists($path)) {
+			return $this->bsTags( file_get_contents($path) );
+		} else {
+			Configure::write('Cache.check' ,false);
+			if (Configure::read() == 0) {
+				$out = "記事が削除された可能性があります";
+			} else {
+				$out = "ファイルが見つかりません<br />{$path}";
+			}
+			return "<div class=\"notice\">{$out}</div>";
+		}
+	}
 	/**
 	 * 続きを読むリンク作成
 	 *
@@ -160,7 +175,8 @@ class BsHelper extends AppHelper {
 	 * @param string $separator この文字列以降を続きと見なす
 	 * @return string 出力文字列
 	 */
-	function readMore($body ,$url = null ,$link_text = '続きを読む' ,$link_attr = array('rel' => 'nofollow') ,$separator = '<!-- BookStand Read More -->') {
+	function readMore($id ,$url = null ,$link_text = '続きを読む' ,$link_attr = array('rel' => 'nofollow') ,$separator = '<!-- BookStand Read More -->') {
+		$body = $this->includeArticle($id);
 		if ($beforeSeparator = strpos($body ,$separator)) {
 			$out = substr($body ,0 ,$beforeSeparator + strlen($separator));
 		} else {
