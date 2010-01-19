@@ -63,7 +63,7 @@ echo $paginator->counter(array(
 		echo $bs->tab(3 ,
 			$html->link($html->image('fam/page_go.png' ,aa('alt',"投稿をプレビュー")), $bs->url(array('action'=>'view', $Article['id']) ) ,aa('target',"preview" ,'title',"投稿をプレビュー") ,null ,false)
 			."\n".
-			$html->link($html->image('fam/page_copy.png' ,aa('alt',"この投稿を下書きに新規作成")), $bs->url(array('action'=>'add','admin'=>false, $Article['id']) ) ,aa('title',"この投稿を下書きに新規作成") ,null ,false)
+			$html->link($html->image('fam/page_copy.png' ,aa('alt',"この投稿を下書きに新規作成")), $bs->url(array('action'=>'add', $Article['id']) ) ,aa('title',"この投稿を下書きに新規作成") ,null ,false)
 			."\n".
 			$html->link($html->image('fam/delete.png' ,aa('alt',"投稿を削除")), $bs->url(array('action'=>'delete', $Article['id']) ), aa('title',"投稿を削除"), sprintf(__('Are you sure you want to delete # %s?', true), $Article['id']) ,false)
 		);
