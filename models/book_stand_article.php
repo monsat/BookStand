@@ -138,10 +138,22 @@ class BookStandArticle extends BookStandAppModel {
 			$folder = new Folder($revisions_dir);
 			$revisions = $folder->find('[0-9a-f]+\.html\.php');
 			// 現在の記事
-			$results["{$id}.html.php"] = file_get_contents($heads_dir . DS . "{$id}.html.php");
+			$modified = filemtime($heads_dir . DS . "{$id}.html.php");
+			$results[$modified] = array(
+				'filename' => "{$id}.html.php",
+				'body' => file_get_contents($heads_dir . DS . "{$id}.html.php"),
+				'modified' => $modified,
+			);
 			foreach ($revisions as $revision) {
-				$results[$revision] = file_get_contents($revisions_dir . DS . $revision);
+				$modified = filemtime($revisions_dir . DS . $revision);
+				$results[$modified] = array(
+					'file_name' => $revision,
+					'body' => file_get_contents($revisions_dir . DS . $revision),
+					'modified' => $modified,
+					'hash' => substr($revision ,0 ,32),
+				);
 			}
+			krsort($results);
 			return $results;
 		} elseif (!is_numeric($id)) {
 			// 特定の履歴
@@ -173,7 +185,9 @@ class BookStandArticle extends BookStandAppModel {
 		if ($is_copy_revision && file_exists($heads_file)) {
 			$revisions_dir = $this->revisionsPath($id);
 			$revisions_file = $revisions_dir . DS . md5_file($heads_file) . ".html.php";
+			$modified = filemtime($heads_file);
 			copy($heads_file ,$revisions_file);
+			@touch($revisions_file ,$modified);
 		}
 		// 保存
 		if ($file = new File($heads_file ,true)) {
