@@ -151,6 +151,8 @@ class BookStandArticlesController extends BookStandAppController {
 			$this->data = $this->BookStandArticle->read(null, $id);
 			$this->data['BookStandArticle'][ $this->{$this->modelClass}->primaryKey ] = null;
 			$this->data['BookStandArticle']['revision'] = $this->BookStandArticle->readRevision($id);
+			unset($this->data['BookStandArticle']['posted']);
+			unset($this->data['BookStandArticle']['begin_publishing']);
 		}
 		// default
 		$this->{$this->modelClass}->setDefault();
@@ -176,13 +178,8 @@ class BookStandArticlesController extends BookStandAppController {
 			}
 		} else {
 			$this->data = $this->BookStandArticle->read(null, $id);
-			if ($revision_hash) {
+			if ($revision_hash && $this->data['BookStandArticle']['revision'] = $this->BookStandArticle->readRevisionFile($id ,$revision_hash)) {
 				// 履歴を遡って編集
-				$this->data['BookStandRevision'] = null;
-				foreach ($this->data['BookStandRevisionHistory'] as $history) {
-					if ($history['id'] == $revision_id) break;
-				}
-				$this->data['BookStandRevision']['body'] = $history['body'];
 				$this->data['BookStandArticle']['is_revision'] = 'create';
 			} else {
 				$this->data['BookStandArticle']['revision'] = $this->BookStandArticle->readRevision($id);
@@ -216,6 +213,7 @@ class BookStandArticlesController extends BookStandAppController {
 			'BookStandArticle.id' => $id,
 		);
 		$this->data = $this->{$this->modelClass}->find('first' ,compact('conditions'));
+		$this->data['BookStandArticle']['revisions'] = $this->BookStandArticle->readRevision($id ,true);
 	}
 	
 

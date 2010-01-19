@@ -143,18 +143,33 @@ class BookStandArticle extends BookStandAppModel {
 		$heads_dir = $this->headsPath($id);
 		if ($is_all_revisions) {
 		// 単一記事の全履歴取得
-			$result = array();
+			$results = array();
 			$revisions_dir = $this->revisionsPath($id);
 			$folder = new Folder($revisions_dir);
-			$revisions = $folder->find('[0-9]+\.html\.php');
+			$revisions = $folder->find('[0-9a-f]+\.html\.php');
+			// 現在の記事
+			$results["{$id}.html.php"] = file_get_contents($heads_dir . DS . "{$id}.html.php");
 			foreach ($revisions as $revision) {
-				$result[] = file_get_contents($head_dir . DS . $revision);
+				$results[$revision] = file_get_contents($revisions_dir . DS . $revision);
 			}
 			return $results;
+		} elseif (!is_numeric($id)) {
+			// 特定の履歴
+			$revisions_dir = $this->revisionsPath($id);
+			return file_get_contents($revisions_dir . DS . "{$id}.html.php");
 		} else {
+			// 現在の記事
 			$heads_file = $heads_dir . DS . "{$id}.html.php";
 			return file_get_contents($heads_file);
 		}
+	}
+	// 記事ファイル（特定の履歴）の読み込み
+	function readRevisionFile($id ,$hash) {
+		// values
+		$heads_dir = $this->headsPath($id);
+		// 特定の履歴
+		$revisions_dir = $this->revisionsPath($id);
+		return file_get_contents($revisions_dir . DS . "{$hash}.html.php");
 	}
 	// 記事ファイルの保存
 	function saveRevision() {
