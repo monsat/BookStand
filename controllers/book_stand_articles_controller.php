@@ -58,7 +58,7 @@ class BookStandArticlesController extends BookStandAppController {
 			}
 		}
 		if (empty($conditions)) {
-			$this->BookStandTool->redirect('ページが見つかりません', array('action'=>'index'));
+			$this->BookStandTool->redirect('ページが見つかりません', array('action'=>'index') ,404);
 		}
 		if (empty($this->params['admin'])) {
 			$conditions = Set::merge($conditions ,array('BookStandArticle.draft'=>0));
@@ -69,7 +69,7 @@ class BookStandArticlesController extends BookStandAppController {
 		$published = true;
 		$this->data = $this->BookStandArticle->find('first', compact('conditions','published'));
 		if (empty($this->data)) {
-			$this->BookStandTool->redirect('ページが存在しないか、削除された可能性があります。<br />最新の一覧を表示します。', array('action'=>'index' ,'top'));
+			$this->BookStandTool->redirect('ページが存在しないか、削除された可能性があります。<br />最新の一覧を表示します。', array('action'=>'index' ,'top') ,404);
 		}
 		$this->BookStandTool->canonical( $this->BookStandTool->articleUrl() );
 		$this->pageTitle = $this->data['BookStandArticle']['title'];
