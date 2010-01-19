@@ -107,16 +107,6 @@ class BookStandArticle extends BookStandAppModel {
 		),
 	);
 	
-	function afterFind($results ,$primary) {
-/*	if ($primary) {
-			foreach ($results as $key => &$result) {
-				if (!empty($result['BookStandArticle'])) {
-					$result['BookStandArticle']['revision'] = $this->readRevision($result['BookStandArticle']['id']);
-				}
-			}
-		}*/
-		return $results;
-	}
 	function beforeSave() {
 		// for search
 		// 本文のサマリーを作成
