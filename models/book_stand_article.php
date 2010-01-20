@@ -204,7 +204,7 @@ class BookStandArticle extends BookStandAppModel {
 	 * @return string ディレクトリのパス
 	 */
 	function headsPath($id) {
-		return APP . Configure::read("BookStand.edit.store_path") . DS . 'heads';
+		return Configure::read("BookStand.edit.store_path") . DS . 'heads';
 	}
 	/**
 	 * Storeディレクトリのパスを返す
@@ -212,7 +212,7 @@ class BookStandArticle extends BookStandAppModel {
 	 * @return string ディレクトリのパス
 	 */
 	function revisionsPath($id) {
-		$path = APP . Configure::read("BookStand.edit.store_path") . DS . 'revisions' . DS . $id;
+		$path = Configure::read("BookStand.edit.store_path") . DS . 'revisions' . DS . $id;
 		if (!file_exists($path)) {
 			mkdir($path);
 		}

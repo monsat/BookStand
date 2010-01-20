@@ -152,7 +152,7 @@ class BsHelper extends AppHelper {
 	// Article用
 	
 	function includeArticle($id = null) {
-		$path = APP . Configure::read("BookStand.edit.store_path") . DS . 'heads' . DS . intval($id) . ".html.php";
+		$path = Configure::read("BookStand.edit.store_path") . DS . 'heads' . DS . intval($id) . ".html.php";
 		if (!is_null($id) && file_exists($path)) {
 			return $this->bsTags( file_get_contents($path) );
 		} else {
