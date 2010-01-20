@@ -40,7 +40,7 @@
  * For BookStand Plugin
  */
 	// for RSS
-	Router::parseExtensions();
+	Router::parseExtensions('rss');
 	// admin
 	$bs_admin = Configure::read('BookStand.config.admin') ? Configure::read('BookStand.config.admin') : 'admin';
 	Router::connect("/{$bs_admin}/book_stand/:controller/:action/*", array(
