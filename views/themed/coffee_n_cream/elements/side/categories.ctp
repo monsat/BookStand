@@ -6,7 +6,7 @@
 		$out = '';
 		$out .= $bs->link(
 			h($category['BookStandCategory']['name']) . "<span class=\"colorLight\">({$category['BookStandCategory']['book_stand_article_count']})</span>",
-			$bs->url(array('controller'=>"book_stand_articles",'action'=>"index",'type'=>"categories",rawurldecode($category['BookStandCategory']['name']) ,'admin' => false)),
+			$bs->url(array('controller'=>"book_stand_articles",'action'=>"index",'type'=>"categories",rawurlencode($category['BookStandCategory']['name']) ,'admin' => false)),
 			array() ,false ,false
 		);
 ?>

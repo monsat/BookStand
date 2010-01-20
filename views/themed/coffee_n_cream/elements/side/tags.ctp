@@ -6,7 +6,7 @@
 		$out = '';
 		$out .= $bs->link(
 			h($tag['BookStandTag']['name']) . "<span class=\"colorLight\">({$tag['BookStandTag']['book_stand_article_count']})</span>",
-			$bs->url(array('controller'=>"book_stand_articles",'action'=>"index",'type'=>"tags",rawurldecode($tag['BookStandTag']['name']) ,'admin' => false)),
+			$bs->url(array('controller'=>"book_stand_articles",'action'=>"index",'type'=>"tags",rawurlencode($tag['BookStandTag']['name']) ,'admin' => false)),
 			array() ,false ,false
 		);
 ?>
