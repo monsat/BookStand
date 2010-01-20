@@ -6,7 +6,7 @@ $config['BookStand']['config']['admin'] = "admin";
 // BookStand Edit
 $config['BookStand']['edit'] = array(
 	//	'editor' => false,
-	'config_path' => '/js/book_stand_cke_config.js',
+	'config_path' => '/themed/book_stand_admin_001/js/book_stand_cke_config.js',
 );
 // BookStand Plugin Info
 $config['BookStand']['info']['title'] = "[ Book Stand ] CakePHP ブログ・プラグイン";
