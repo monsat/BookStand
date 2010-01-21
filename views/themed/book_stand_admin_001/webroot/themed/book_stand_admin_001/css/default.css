@@ -84,8 +84,8 @@ ul, li {
 #header{
 	padding: 10px 20px;
 	background: #003d4c;
-	border-radius-bottomleft:8px;-moz-border-radius-bottomleft:8px;-webkit-border-radius-bottomleft:8px;
-	border-radius-bottomright:8px;-moz-border-radius-bottomright:8px;-webkit-border-radius-bottomright:8px;
+	border-radius-bottomleft:8px;-moz-border-radius-bottomleft:8px;-webkit-border-bottom-left-radius:8px;
+	border-radius-bottomright:8px;-moz-border-radius-bottomright:8px;-webkit-border-bottom-right-radius:8px;
 	color: #fff;
 }
 #header h1 {
@@ -185,8 +185,8 @@ ul, li {
 	color: #fff;
 	padding: 10px 20px 40px;
 	background: #003d4c;
-	border-radius-topleft:8px;-moz-border-radius-topleft:8px;-webkit-border-radius-topleft:8px;
-	border-radius-topright:8px;-moz-border-radius-topright:8px;-webkit-border-radius-topright:8px;
+	border-radius-topleft:8px;-moz-border-radius-topleft:8px;-webkit-border-top-left-radius:8px;
+	border-radius-topright:8px;-moz-border-radius-topright:8px;-webkit-border-top-right-radius:8px;
 	font-size: 12px;
 	font-weight: bold;
 	text-align: center;
