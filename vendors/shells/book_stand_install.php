@@ -131,16 +131,12 @@ class BookStandInstallShell extends Shell {
 		$this->mbout('Make symlinks' ,'必要ファイルへのシンボリックリンクを作成します');
 		$this->mbout('If you can not use symlinks ,copy files' ,'シンボリックリンクが作成できない場合は、ファイルをコピーします');
 		$this->mbout('Checking symlinks' ,'ディレクトリの有無を確認します' ,false);
-		
+		// plugins/views/themed
 		$themed_dir = $this->plugin_dir . DS . 'views' . DS . 'themed';
-		$dir = dir($themed_dir);
-		while (($ent = $dir->read()) !== FALSE) {
-			$this->mbout(' .' ,'。' ,false);
-			$webroot_themed_dir = $themed_dir . DS . $ent . DS . $this->webroot_themed_dir . DS . $ent;
-			if (is_dir($themed_dir . DS . $ent) && file_exists($webroot_themed_dir)) {
-				$themes[ $ent ] = $webroot_themed_dir;
-			}
-		}
+		$this->__themes($themes ,$themed_dir);
+		// app/views/themed
+		$themed_dir = $this->params['working'] . DS . 'views' . DS . 'themed';
+		$this->__themes($themes ,$themed_dir);
 		$this->out('');
 		
 		if (!file_exists($this->params['working'] . DS . $this->webroot_themed_dir)){
@@ -161,6 +157,16 @@ class BookStandInstallShell extends Shell {
 				}
 			} else {
 				$this->mbout("exists: {$name}");
+			}
+		}
+	}
+	function __themes(&$themes ,$themed_dir) {
+		$dir = dir($themed_dir);
+		while (($ent = $dir->read()) !== FALSE) {
+			$this->mbout(' .' ,'。' ,false);
+			$webroot_themed_dir = $themed_dir . DS . $ent . DS . $this->webroot_themed_dir . DS . $ent;
+			if (is_dir($themed_dir . DS . $ent) && file_exists($webroot_themed_dir)) {
+				$themes[ $ent ] = $webroot_themed_dir;
 			}
 		}
 	}
