@@ -1,2 +1,2 @@
-<?php if (!Configure::read('My.isDev')) : ?>
+<?php if (!Configure::read() : ?>
 <?php endif; ?>
