@@ -51,7 +51,7 @@ class BookStandToolComponentForOverride extends Object
 		);
 		$allows = Configure::read('BookStand.dynamic_url');
 		foreach ($allows as $allow) {
-			$results[ $allow ] = $article['BookStandArticle'][ $allow ];
+			$results[ $allow ] = rawurlencode($article['BookStandArticle'][ $allow ]);
 		}
 		return $results;
 	}
