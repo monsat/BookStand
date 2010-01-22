@@ -27,6 +27,8 @@ class BookStandToolComponentForOverride extends Object
 		// authorized for CKFinder
 		if (!empty($this->Controller->params['admin'])) {
 			$this->Controller->Session->write('Bs.files_path' ,Configure::read('BookStand.edit.files_path'));
+		} else {
+			$this->Controller->Session->delete('Bs.files_path');
 		}
 	}
 	
