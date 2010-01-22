@@ -24,6 +24,10 @@ class BookStandToolComponentForOverride extends Object
 				$this->Controller->Security->blackHoleCallback = 'blackHoleCallback';
 			}
 		}
+		// authorized for CKFinder
+		if (!empty($this->Controller->params['admin'])) {
+			$this->Controller->Session->write('Bs.files_path' ,Configure::read('BookStand.edit.files_path'));
+		}
 	}
 	
 	function beforeRender() {
