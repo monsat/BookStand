@@ -148,7 +148,9 @@ class BookStandInstallShell extends Shell {
 		$this->__themes($themes ,$themed_dir);
 		// app/views/themed
 		$themed_dir = $this->params['working'] . DS . 'views' . DS . 'themed';
-		$this->__themes($themes ,$themed_dir);
+		if (file_exists($themed_dir)) {
+			$this->__themes($themes ,$themed_dir);
+		}
 		$this->out('');
 		
 		if (!file_exists($this->params['working'] . DS . $this->webroot_themed_dir)){
