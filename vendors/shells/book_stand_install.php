@@ -4,10 +4,14 @@ class BookStandInstallShell extends Shell {
 	
 	var $version = 'beta - 0.5';
 	var $output_encode = 'utf-8';
+	
 	var $plugin_dir;
 	var $config_dir;
 	var $app_config_dir;
 	var $webroot_themed_dir;
+	var $upload_dir;
+	var $parent_upload_path;
+	
 	var $config_file_name = 'book_stand_config.php';
 	var $routes_file_name = 'book_stand_routes.php';
 	
@@ -18,7 +22,13 @@ class BookStandInstallShell extends Shell {
 		$this->plugin_dir = dirname(dirname(dirname(__FILE__)));
 		$this->config_dir = $this->plugin_dir . DS . 'config';
 		$this->app_config_dir = $this->params['working'] . DS . 'config';
-		$this->webroot_themed_dir = 'webroot' . DS . 'themed';
+		$this->webroot_themed_dir = $this->params['webroot'] . DS . 'themed';
+		// Configure::read('BookStand') Default
+		App::import('Component', 'BookStand.BookStandTool');
+		$this->BookStandTool = new BookStandToolComponent($this);
+		$this->BookStandTool->config();
+		$this->upload_dir = Configure::read('BookStand.edit.files_path');
+		$this->parent_upload_path = $this->params['working'] . DS . $this->params['webroot'];
 		
 		// Welcome Message
 		$this->out("BookStand Plugin Installer (Upgrader) {$this->version}");
@@ -49,6 +59,8 @@ class BookStandInstallShell extends Shell {
 		$this->_routes();
 		// シンボリックリンク
 		$this->_makeSymLinks();
+		// CKFinder
+		$this->_makeCkfDir();
 	}
 	
 	function _database() {
@@ -168,6 +180,34 @@ class BookStandInstallShell extends Shell {
 			if (is_dir($themed_dir . DS . $ent) && file_exists($webroot_themed_dir)) {
 				$themes[ $ent ] = $webroot_themed_dir;
 			}
+		}
+	}
+	
+	function _makeCkfDir() {
+		$this->hr();
+		$this->mbout('Make Directory for CKFinder' ,'CKFinder用のディレクトリを作成します');
+		$this->mbout($this->parent_upload_path . $this->upload_dir);
+		// ディレクトリチェック
+		$dir = trim($this->upload_dir ,'/');
+		$dirs = explode('/' ,$dir);
+		$count = count($dirs);
+		$tmp_dir = $this->parent_upload_path;
+		for ($i=0;$i<$count-1;$i++) {
+			$tmp_dir .= DS . $dirs[$i];
+			if (!file_exists($tmp_dir)){
+				$this->mbout("parent dir does not exists. making..." , '上位ディレクトリがありません。作成します');
+				if (!mkdir($tmp_dir)) {
+					$this->done('can not make the directory' , 'ディレクトリを作成できませんでした');
+				}
+			}
+		}
+		if (!file_exists($this->parent_upload_path . $this->upload_dir)){
+			$this->mbout("Upload dir does not exists. making..." , 'アップロードディレクトリがありません。作成します');
+			if (!mkdir($this->parent_upload_path . $this->upload_dir)) {
+				$this->done('can not make the directory' , 'ディレクトリを作成できませんでした');
+			}
+		} else {
+			$this->mbout("exists: {$this->upload_dir}");
 		}
 	}
 	
