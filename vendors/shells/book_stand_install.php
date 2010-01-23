@@ -203,9 +203,10 @@ class BookStandInstallShell extends Shell {
 				}
 			}
 		}
-		if (!file_exists($this->parent_upload_path . $this->upload_dir)){
+		$upload_dir = rtrim($this->parent_upload_path . $this->upload_dir , '/');
+		if (!file_exists($upload_dir)){
 			$this->mbout("Upload dir does not exists. making..." , 'アップロードディレクトリがありません。作成します');
-			if (!mkdir($this->parent_upload_path . $this->upload_dir)) {
+			if (!mkdir($upload_dir)) {
 				$this->done('can not make the directory' , 'ディレクトリを作成できませんでした');
 			}
 		} else {
