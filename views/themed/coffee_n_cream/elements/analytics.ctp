@@ -1,2 +1,2 @@
-<?php if (!Configure::read() : ?>
+<?php if (!Configure::read()) : ?>
 <?php endif; ?>
